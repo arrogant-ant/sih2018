@@ -5,8 +5,12 @@ package inc.iris.sih2018.logic;
  */
 
 public class ParkingArea {
-    protected String areaId, name, address, gps;
-    private int capacity, available;
+    /**
+     * rate= parking rate
+     */
+    private String areaId, name, address, gps;
+    private int capacity, available,rate;
+    private final int DEFAULT_RATE=10;
 
     public ParkingArea(String areaId, String name, String address, String gps, int capacity) {
         this.areaId = areaId;
@@ -14,6 +18,16 @@ public class ParkingArea {
         this.address = address;
         this.gps = gps;
         this.capacity = capacity;
+        this.rate=DEFAULT_RATE;
+    }
+
+    public ParkingArea(String areaId, String name, String address, String gps, int capacity, int rate) {
+        this.areaId = areaId;
+        this.name = name;
+        this.address = address;
+        this.gps = gps;
+        this.capacity = capacity;
+        this.rate = rate;
     }
 
     public String getName() {
@@ -50,6 +64,14 @@ public class ParkingArea {
 
     public String getGps() {
         return gps;
+    }
+
+    public int getRate() {
+        return rate;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
     }
 }
 

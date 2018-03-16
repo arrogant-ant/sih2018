@@ -5,13 +5,22 @@ package inc.iris.sih2018.logic;
  */
 
 public class ParkingSlot extends ParkingArea {
+    /**
+     * empty store parking state
+     */
     private int slotID;
     private boolean empty;
 
-    public ParkingSlot(String areaId, String name, String address, String gps, int capacity, int slotID, boolean empty) {
+    public ParkingSlot(String areaId, String name, String address, String gps, int capacity, int slotID) {
         super(areaId, name, address, gps, capacity);
         this.slotID = slotID;
-        this.empty = empty;
+        this.empty = true;
+    }
+
+    public ParkingSlot(String areaId, String name, String address, String gps, int capacity, int rate, int slotID) {
+        super(areaId, name, address, gps, capacity, rate);
+        this.slotID = slotID;
+        this.empty=true;
     }
 
     public int getSlotID() {
