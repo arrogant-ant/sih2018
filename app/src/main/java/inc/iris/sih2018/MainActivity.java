@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FusedLocationProviderClient mFusedLocationClient;
     private TextView locText;
-    private Location mLocation;
     private Location mLastLocation;
 
     @Override

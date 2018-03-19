@@ -1,29 +1,36 @@
 package inc.iris.sih2018.logic;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Sud on 3/16/18.
  */
+
 
 public class Booking {
     /**
      * transactionTime = time at which booking was made
      * schArrival- schduled arrival
-     * schDepature= scheduled depature
+     * schDeparture= scheduled depature
      * TIME_UNIT= smallest parking time measure unit
      */
-    private long transactionTime,schArrival,schDepature;
+    private long transactionTime,schArrival, schDeparture;
     private int bookingDuration, bookingCost;
     private ParkingSlot slot;
     private final int TIME_UNIT=1000*60*60;//FOR ONE HOUR
+    private String vehicleID; //can be vehicle no;
+    private BookingStatus status;
 
 
-    public Booking(long transactionTime, long schArrival, long schDepature, ParkingSlot slot) {
+    public Booking(long transactionTime, long schArrival, long schDeparture, ParkingSlot slot, String vehicleID, BookingStatus status) {
         this.transactionTime = transactionTime;
         this.schArrival = schArrival;
-        this.schDepature = schDepature;
+        this.schDeparture = schDeparture;
         this.slot = slot;
-        bookingDuration = (int) ((schDepature-schArrival)/TIME_UNIT);
+        bookingDuration = (int)Math.ceil((double)(schDeparture -schArrival)/TIME_UNIT);
         bookingCost=bookingDuration*slot.getRate();
+        this.vehicleID=vehicleID;
+        this.status=status;
     }
 
     public long getSchArrival() {
@@ -34,12 +41,21 @@ public class Booking {
         this.schArrival = schArrival;
     }
 
-    public long getSchDepature() {
-        return schDepature;
+    public long getSchDeparture() {
+        return schDeparture;
     }
 
-    public void setSchDepature(long schDepature) {
-        this.schDepature = schDepature;
+    public void setSchDeparture(long schDepature) {
+        this.schDeparture = schDepature;
+    }
+
+    public String getTimeSlot()
+    {
+        String arrival, departure;
+        SimpleDateFormat timeFormat=new SimpleDateFormat("hh:mm aaa");
+        arrival= timeFormat.format(getSchArrival());
+        departure=timeFormat.format(getSchDeparture());
+        return arrival+" - "+departure;
     }
 
     public long getTransactionTime() {
@@ -54,7 +70,29 @@ public class Booking {
         return slot;
     }
 
+    //slot can only be changed if car not parked
+    public boolean setSlot(ParkingSlot slot) {
+        if(status==BookingStatus.PARKED)
+            return false;
+        this.slot = slot;
+        return true;
+    }
+
     public int getBookingCost() {
         return bookingCost;
     }
+
+    public String getVehicleID() {
+        return vehicleID;
+    }
+
+    public BookingStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookingStatus status) {
+        this.status = status;
+    }
+
+
 }
