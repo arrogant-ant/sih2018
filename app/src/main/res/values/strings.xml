@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SIH2018</string>
+    <string name="google_maps_key">AIzaSyBG7Eoj3M_feR3-uBTDgtaTX7TkG42DJP0</string>
 
 </resources>
