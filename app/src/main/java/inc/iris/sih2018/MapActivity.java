@@ -1,41 +1,51 @@
 package inc.iris.sih2018;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = MapActivity.class.getSimpleName();
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-
+    private static final String COARSE_LOACATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final String FINE_LOACATION = Manifest.permission.ACCESS_FINE_LOCATION;
 
     private FusedLocationProviderClient mFusedLocationClient;
-    private TextView locText;
     private Location mLastLocation;
+    private GoogleMap mMap;
+    private static final float DEFAULT_ZOOM = 15f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        locText=findViewById(R.id.loc_tx);
 
 
     }
+
+    private void initMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
 
     @Override
     public void onStart() {
@@ -44,7 +54,8 @@ public class MapActivity extends AppCompatActivity {
         if (!checkPermissions()) {
             requestPermissions();
         } else {
-            getLastLocation();
+            initMap();
+            // getLastLocation();
         }
     }
 
@@ -65,35 +76,47 @@ public class MapActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
                             mLastLocation = task.getResult();
-
-                            locText.setText(mLastLocation.getLatitude()+":"+mLastLocation.getLongitude());
+                            moveCamera(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), DEFAULT_ZOOM);
 
                         } else {
                             Log.w(TAG, "getLastLocation:exception", task.getException());
+                            Toast.makeText(MapActivity.this, "Unable to find the location.\nPease enage your gps", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-
-
+    /**
+     * to move the focus of the map
+     */
+    private void moveCamera(LatLng latLng, float zoom) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    }
 
 
     /**
      * Return the current state of the permissions needed.
      */
     private boolean checkPermissions() {
-        int permissionState = ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
-        return permissionState == PackageManager.PERMISSION_GRANTED;
+        if (ActivityCompat.checkSelfPermission(this, COARSE_LOACATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, FINE_LOACATION) == PackageManager.PERMISSION_GRANTED)
+            return true;
+
+        return false;
     }
 
+    /**
+     * for requesting permission runtime
+     */
     private void startLocationPermissionRequest() {
+        String[] permissions = {COARSE_LOACATION, FINE_LOACATION};
+
         ActivityCompat.requestPermissions(MapActivity.this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                permissions,
                 REQUEST_PERMISSIONS_REQUEST_CODE);
     }
 
+    //this is done to provide additional info
     private void requestPermissions() {
         boolean shouldProvideRationale =
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -103,7 +126,7 @@ public class MapActivity extends AppCompatActivity {
         // request previously, but didn't check the "Don't ask again" checkbox.
         if (shouldProvideRationale) {
             Log.i(TAG, "Displaying permission rationale to provide additional context.");
-
+            startLocationPermissionRequest();
 
 
         } else {
@@ -127,22 +150,41 @@ public class MapActivity extends AppCompatActivity {
                 // If user interaction was interrupted, the permission request is cancelled and you
                 // receive empty arrays.
                 Log.i(TAG, "User interaction was cancelled.");
-            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted.
-                getLastLocation();
             } else {
-                // Permission denied.
+                for (int i = 0; i < grantResults.length; i++) {
+                    //if permissin not granted
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(this, "Need permissions", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                // Notify the user via a SnackBar that they have rejected a core permission for the
-                // app, which makes the Activity useless. In a real app, core permissions would
-                // typically be best requested during a welcome-screen flow.
-
-                // Additionally, it is important to remember that a permission might have been
-                // rejected without asking the user for permission (device policy or "Never ask
-                // again" prompts). Therefore, a user interface affordance is typically implemented
-                // when permissions are denied. Otherwise, your app could appear unresponsive to
-
+                }
+                // Permission granted.
+                initMap();
+                //getLastLocation();
             }
+
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        Toast.makeText(this, "Map ready", Toast.LENGTH_SHORT).show();
+        getLastLocation();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        //as my location button is hidden with search bar
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
     }
 }
