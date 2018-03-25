@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
     }
     public void openBookings(View view) {
         startActivity(new Intent(this, Bookings.class));
