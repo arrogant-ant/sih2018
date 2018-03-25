@@ -9,11 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import java.util.Calendar;
 
 import inc.iris.sih2018.logic.Booking;
 import inc.iris.sih2018.logic.BookingStatus;
 import inc.iris.sih2018.logic.ParkingSlot;
+import inc.iris.sih2018.logic.VolleySingleton;
 
 
 /**
@@ -46,6 +53,19 @@ public class CurrentBookingTab extends Fragment {
         ParkingSlot slot=new ParkingSlot("1","BIT","Sindri","12212:111",400,1);
         Booking record=new Booking(currentTime,currentTime+60000,currentTime+60*60000,slot,"jh 01 aa 1234", BookingStatus.PARKED);
         Booking records[]={record,record};
+        //TODO use volley to get records
+       /* StringRequest request=new StringRequest(Request.Method.GET, "url", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);*/
         return records;
     }
 }
