@@ -66,6 +66,7 @@ public class CurrentBookingTab extends Fragment {
             }
         });
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);*/
-        return records;
+
+       return records;
     }
 }
