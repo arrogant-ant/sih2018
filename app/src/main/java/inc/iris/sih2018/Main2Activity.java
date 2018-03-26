@@ -47,6 +47,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -219,8 +220,6 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
         setSupportActionBar(toolbar);
 
 
-        markerOptions=new MarkerOptions();
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_car));
 
     }
 
@@ -693,6 +692,15 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                         }
                     }
                 });
+        googleMap_global.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+         UiSettings uiSettings=googleMap_global.getUiSettings();
+         uiSettings.setAllGesturesEnabled(true);
+        uiSettings.setZoomControlsEnabled(true);
+        uiSettings.setCompassEnabled(true);
+
+
+
+
 
         LatLng park1=new LatLng(23.711986 , 76.504629);
         LatLng park2=new LatLng(24.711986 , 36.504629);
