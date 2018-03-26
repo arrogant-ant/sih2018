@@ -1,11 +1,10 @@
-/*
 package inc.iris.sih2018.logic;
-
-import android.widget.ArrayAdapter;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -29,74 +28,41 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import android.content.Context;
-import android.graphics.Typeface;
-import android.text.style.CharacterStyle;
-import android.text.style.StyleSpan;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.common.data.DataBufferUtils;
-import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.AutocompletePredictionBufferResponse;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.tasks.RuntimeExecutionException;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-
+/**
+ * Adapter that handles Autocomplete requests from the Places Geo Data Client.
+ * {@link AutocompletePrediction} results from the API are frozen and stored directly in this
+ * adapter. (See {@link AutocompletePrediction#freeze()}.)
+ */
 public class PlaceAutocompleteAdapter
         extends ArrayAdapter<AutocompletePrediction> implements Filterable {
 
-    private static final String TAG = "PlaceAutocompleteAdapter";
+    private static final String TAG = "PlaceAdapter";
     private static final CharacterStyle STYLE_BOLD = new StyleSpan(Typeface.BOLD);
-    */
-/**
+    /**
      * Current results returned by this adapter.
-     *//*
-
+     */
     private ArrayList<AutocompletePrediction> mResultList;
 
-    */
-/**
+    /**
      * Handles autocomplete requests.
-     *//*
-
+     */
     private GeoDataClient mGeoDataClient;
 
-    */
-/**
+    /**
      * The bounds used for Places Geo Data autocomplete API requests.
-     *//*
-
+     */
     private LatLngBounds mBounds;
 
-    */
-/**
+    /**
      * The autocomplete filter used to restrict queries to a specific set of place types.
-     *//*
-
+     */
     private AutocompleteFilter mPlaceFilter;
 
-    */
-/**
+    /**
      * Initializes with a resource for text rows and autocomplete query bounds.
      *
      * @see android.widget.ArrayAdapter#ArrayAdapter(android.content.Context, int)
-     *//*
-
+     */
     public PlaceAutocompleteAdapter(Context context, GeoDataClient geoDataClient,
                                     LatLngBounds bounds, AutocompleteFilter filter) {
         super(context, android.R.layout.simple_expandable_list_item_2, android.R.id.text1);
@@ -105,30 +71,24 @@ public class PlaceAutocompleteAdapter
         mPlaceFilter = filter;
     }
 
-    */
-/**
+    /**
      * Sets the bounds for all subsequent queries.
-     *//*
-
+     */
     public void setBounds(LatLngBounds bounds) {
         mBounds = bounds;
     }
 
-    */
-/**
+    /**
      * Returns the number of results received in the last autocomplete query.
-     *//*
-
+     */
     @Override
     public int getCount() {
         return mResultList.size();
     }
 
-    */
-/**
+    /**
      * Returns an item from the last autocomplete query.
-     *//*
-
+     */
     @Override
     public AutocompletePrediction getItem(int position) {
         return mResultList.get(position);
@@ -152,11 +112,9 @@ public class PlaceAutocompleteAdapter
         return row;
     }
 
-    */
-/**
+    /**
      * Returns the filter for the current set of autocomplete results.
-     *//*
-
+     */
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -210,8 +168,7 @@ public class PlaceAutocompleteAdapter
         };
     }
 
-    */
-/**
+    /**
      * Submits an autocomplete query to the Places Geo Data Autocomplete API.
      * Results are returned as frozen AutocompletePrediction objects, ready to be cached.
      * Returns an empty list if no results were found.
@@ -224,8 +181,8 @@ public class PlaceAutocompleteAdapter
      * @return Results from the autocomplete API or null if the query was not successful.
      * @see GeoDataClient#getAutocompletePredictions(String, LatLngBounds, AutocompleteFilter)
      * @see AutocompletePrediction#freeze()
-     *//*
-
+     */
+    @SuppressLint("RestrictedApi")
     private ArrayList<AutocompletePrediction> getAutocomplete(CharSequence constraint) {
         Log.i(TAG, "Starting autocomplete query for: " + constraint);
 
@@ -259,4 +216,4 @@ public class PlaceAutocompleteAdapter
             return null;
         }
     }
-}*/
+}
