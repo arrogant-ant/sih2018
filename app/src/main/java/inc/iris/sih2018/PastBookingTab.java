@@ -26,7 +26,7 @@ public class PastBookingTab extends Fragment {
     private Booking[] records;
 
     public PastBookingTab() {
-        // Required empty public constructor
+        // Required empty public construct <string name="permission_rationale">Location permissions are needed for core functionality of PARKME!!!</string>or
     }
 
 
