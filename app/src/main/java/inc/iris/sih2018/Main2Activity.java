@@ -1,6 +1,8 @@
 package inc.iris.sih2018;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.Manifest;
@@ -59,6 +61,8 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import inc.iris.sih2018.logic.Booking;
 
 
 public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallback {
@@ -698,36 +702,92 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
 
         Log.d("shubham",String.valueOf(langitude_in_double));
 
-        parking1=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park1).title("parking 1"));
-        parking2=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park2).title("parking 2"));
-        parking3=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park3).title("parking 3"));
-        parking4=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park4).title("parking 4"));
+        parking1=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park1).title("parking 1"));
+        parking2=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park2).title("parking 2"));
+        parking3=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park3).title("parking 3"));
+        parking4=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park4).title("parking 4"));
         googleMap_global.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker)
             {
                 if(marker.equals(parking1))
                 {
-                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
-                    startActivity(i);
+                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(Main2Activity.this);
+                    alertDialog.setMessage("Book Your Parking IN Parking Area 1")
+                            .setTitle("Booking");
+                    alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Main2Activity.this, Bookings.class));
+                        }
+                    });
+                    alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
+
 
                 }
                 if(marker.equals(parking2))
                 {
-                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
-                    startActivity(i);
-
+                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(Main2Activity.this);
+                    alertDialog.setMessage("Book Your Parking IN Parking Area 2")
+                            .setTitle("Booking");
+                    alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Main2Activity.this, Bookings.class));
+                        }
+                    });
+                    alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
                 }
                 if(marker.equals(parking3))
                 {
-                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
-                    startActivity(i);
+                    final AlertDialog.Builder alertDialog=new AlertDialog.Builder(Main2Activity.this);
+                    alertDialog.setMessage("Book Your Parking IN Parking Area 3")
+                            .setTitle("Booking");
+                    alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Main2Activity.this, Bookings.class));
+                        }
+                    });
+                    alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
 
                 }
                 if(marker.equals(parking4))
                 {
-                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
-                    startActivity(i);
+                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(Main2Activity.this);
+                    alertDialog.setMessage("Book Your Parking IN Parking Area 4")
+                            .setTitle("Booking");
+                    alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Main2Activity.this, Bookings.class));
+                        }
+                    });
+                    alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
 
                 }
 
