@@ -315,7 +315,6 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
             if (savedInstanceState.keySet().contains(KEY_LAST_UPDATED_TIME_STRING)) {
                 mLastUpdateTime = savedInstanceState.getString(KEY_LAST_UPDATED_TIME_STRING);
             }
-            updateUI();
         }
     }
 
@@ -371,16 +370,17 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
 
         double lat=location.getLatitude();
         double lng=location.getLongitude();
+        LatLng latLng=new LatLng(lat,lng);
         Log.d("marker",""+lat);
         if(marker_object!=null)
         {
             marker_object.remove();
 
         }
-         marker_object= googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.car)).position(new LatLng(lat,longi)).title("YOU"));
-        LatLng latLng=new LatLng(lat,lng);
-        googleMap_global.addMarker(markerOptions.position(latLng));
-        moveCamera(latLng,DEFAULT_ZOOM);
+         marker_object= googleMap_global.addMarker(new MarkerOptions()
+                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.car))
+                 .position(latLng)
+                 .title("MY Location"));
     }
     /**
      * Uses a {@link com.google.android.gms.location.LocationSettingsRequest.Builder} to build
@@ -406,7 +406,6 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                     case Activity.RESULT_CANCELED:
                         Log.i(TAG, "User chose not to make required location settings changes.");
                         mRequestingLocationUpdates = false;
-                        updateUI();
                         break;
                 }
                 break;
