@@ -38,7 +38,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -129,6 +131,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
     private String latitude = "";
     private double langitude_in_double =0;
     private double latitude_in_double =0;
+    Marker marker_object,parking1,parking2,parking3,parking4;
 
 
 
@@ -260,7 +263,12 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
         double lat=location.getLatitude();
         double longi=location.getLongitude();
         Log.d("marker",""+lat);
-        googleMap_global.addMarker(new MarkerOptions().position(new LatLng(lat,longi)));
+        if(marker_object!=null)
+        {
+            marker_object.remove();
+
+        }
+         marker_object= googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.car)).position(new LatLng(lat,longi)).title("YOU"));
     }
     /**
      * Uses a {@link com.google.android.gms.location.LocationSettingsRequest.Builder} to build
@@ -591,7 +599,53 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        LatLng park1=new LatLng(23.711986 , 76.504629);
+        LatLng park2=new LatLng(24.711986 , 36.504629);
+        LatLng park3=new LatLng(28.711986 , 86.504629);
+        LatLng park4=new LatLng(65.711986 , 56.504629);
+
         Log.d("shubham",String.valueOf(langitude_in_double));
+
+        parking1=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park1).title("parking 1"));
+        parking2=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park2).title("parking 2"));
+        parking3=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park3).title("parking 3"));
+        parking4=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park4).title("parking 4"));
+        googleMap_global.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker)
+            {
+                if(marker.equals(parking1))
+                {
+                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
+                    startActivity(i);
+
+                }
+                if(marker.equals(parking2))
+                {
+                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
+                    startActivity(i);
+
+                }
+                if(marker.equals(parking3))
+                {
+                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
+                    startActivity(i);
+
+                }
+                if(marker.equals(parking4))
+                {
+                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
+                    startActivity(i);
+
+                }
+
+               return true;
+            }
+        });
+
+
+
+
 
 
 
