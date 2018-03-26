@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     public void openBookings(View view) {
         startActivity(new Intent(this, Bookings.class));
     }
+    public void openNearbyParkings(View view) {
+        startActivity(new Intent(this, nearby_parking.class));
+    }
 
     public void openMap(View view) {
 
