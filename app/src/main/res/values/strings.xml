@@ -2,4 +2,20 @@
     <string name="app_name">SIH2018</string>
     <string name="google_maps_key">AIzaSyBG7Eoj3M_feR3-uBTDgtaTX7TkG42DJP0</string>
     <string name="permission_rationale">Location permissions are needed for core functionality of PARKME!!!</string>
+
+
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="last_update_time_label">Last location update time</string>
+
+    <string name="start_updates">Start updates</string>
+    <string name="stop_updates">Stop updates</string>
+
+    <string name="location_settings_inadequate_warning">The location settings on the device are not
+        adequate to run this sample. Fix in Settings.</string>
+
+
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core
+        functionality.</string>
+    <string name="settings">Settings</string>
 </resources>
