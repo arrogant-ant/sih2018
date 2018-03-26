@@ -33,6 +33,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -168,7 +169,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
      * Start Updates and Stop Updates buttons.
-     */
+     */View mapview;
     private Boolean mRequestingLocationUpdates;
 
     /**
@@ -192,6 +193,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
         mRequestingLocationUpdates = false;
         mLastUpdateTime = "";
 
+
         // Update values using data stored in the Bundle.
         updateValuesFromBundle(savedInstanceState);
 
@@ -209,6 +211,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
             startLocationUpdates();
         }
         SupportMapFragment mapfragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapview=mapfragment.getView();
         mapfragment.getMapAsync(Main2Activity.this);
         Log.d(TAG,"init keyboard");
 
@@ -699,6 +702,18 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        if (mapview != null &&
+                mapview.findViewById(Integer.parseInt("1")) != null) {
+            // Get the button view
+            View locationButton = ((View) mapview.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+            // and next place it, on bottom right (as Google Maps app)
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                    locationButton.getLayoutParams();
+            // position on right bottom
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            layoutParams.setMargins(0, 0, 60, 180);
+        }
         //finding last location
         mFusedLocationClient.getLastLocation()
                 .addOnCompleteListener(this, new OnCompleteListener<Location>() {
@@ -714,12 +729,12 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                         }
                     }
                 });
-        googleMap_global.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
          UiSettings uiSettings=googleMap_global.getUiSettings();
          uiSettings.setAllGesturesEnabled(true);
-        uiSettings.setZoomControlsEnabled(true);
-        uiSettings.setCompassEnabled(true);
 
+        uiSettings.setCompassEnabled(true);
+          googleMap_global.setMyLocationEnabled(true);
 
 
 
