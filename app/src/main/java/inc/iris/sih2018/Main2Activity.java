@@ -6,23 +6,30 @@ import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
-
+import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
@@ -49,15 +56,16 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-
+import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 import inc.iris.sih2018.logic.Booking;
 
 
-public class Main2Activity extends AppCompatActivity implements OnMapReadyCallback {
+public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallback {
 
     private static final String TAG = Main2Activity.class.getSimpleName();
 
@@ -119,13 +127,11 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
      */
     private Location mCurrentLocation;
 
-    // UI Widgets.
-    private Button mStartUpdatesButton;
-    private Button mStopUpdatesButton;
-    private TextView mLastUpdateTimeTextView;
-    private TextView mLatitudeTextView;
-    private TextView mLongitudeTextView;
-    private GoogleMap googleMap_global;
+    //UI
+    private Toolbar toolbar;
+    private MarkerOptions markerOptions;
+    private Marker searchMarker ;
+    private EditText search_et;
 
     // Labels.
     private String mLatitudeLabel;
@@ -135,6 +141,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
     private String latitude = "";
     private double langitude_in_double =0;
     private double latitude_in_double =0;
+    private static final float DEFAULT_ZOOM = 15f;
     Marker marker_object,parking1,parking2,parking3,parking4;
 
 
@@ -150,12 +157,16 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
      * Time when the location was updated represented as a String.
      */
     private String mLastUpdateTime;
+    private GoogleMap googleMap_global;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
+        //set ui
+        initUI();
+        // Set labels.
         mLatitudeLabel = getResources().getString(R.string.latitude_label);
         mLongitudeLabel = getResources().getString(R.string.longitude_label);
         mLastUpdateTimeLabel = getResources().getString(R.string.last_update_time_label);
@@ -181,7 +192,101 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
         }
         SupportMapFragment mapfragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapfragment.getMapAsync(Main2Activity.this);
+        search_et=findViewById(R.id.input_search);
+        Log.d(TAG,"init keyboard");
+        search_et.setFocusableInTouchMode(true);
+        search_et.requestFocus();
+        search_et.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.d(TAG,"key pressed");
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    return true;
+                }
+                return false;
+            }
+        });
 
+    }
+
+    /**
+     * Toolbar and UI stuff
+     */
+    private void initUI() {
+        toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        markerOptions=new MarkerOptions();
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_car));
+
+    }
+
+    /**
+     * onClick of search image view
+     * @param view
+     */
+     public void geoLocate(View view) {
+         Log.d(TAG, "geoLocate: onClick");
+        String searchString=search_et.getText().toString();
+        Geocoder geocoder=new Geocoder(this);
+        List<Address> list=new ArrayList<>();
+        try {
+            list=geocoder.getFromLocationName(searchString,1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(list.size()>0)
+        {
+            Address address=list.get(0);
+            if(searchMarker!=null)
+                    searchMarker.remove();
+            LatLng latLng=new LatLng(address.getLatitude(),address.getLongitude());
+            searchMarker=googleMap_global.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(address.getAddressLine(0)));
+            moveCamera(latLng,DEFAULT_ZOOM);
+        }
+
+    }
+
+    /**
+     *
+     * @param latLng
+     * @param zoom
+     */
+    private void moveCamera(LatLng latLng, float zoom) {
+        googleMap_global.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.login:
+                Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.nearby:
+                Toast.makeText(this, "nearby", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.help:
+                Toast.makeText(this, "help", Toast.LENGTH_SHORT).show();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -256,7 +361,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
                 mCurrentLocation = locationResult.getLastLocation();
                 mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
                 placeMarker(mCurrentLocation);
-                updateUI();
+
             }
         };
     }
@@ -265,7 +370,7 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
     {
 
         double lat=location.getLatitude();
-        double longi=location.getLongitude();
+        double lng=location.getLongitude();
         Log.d("marker",""+lat);
         if(marker_object!=null)
         {
@@ -273,6 +378,9 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
 
         }
          marker_object= googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.car)).position(new LatLng(lat,longi)).title("YOU"));
+        LatLng latLng=new LatLng(lat,lng);
+        googleMap_global.addMarker(markerOptions.position(latLng));
+        moveCamera(latLng,DEFAULT_ZOOM);
     }
     /**
      * Uses a {@link com.google.android.gms.location.LocationSettingsRequest.Builder} to build
@@ -327,7 +435,6 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
         stopLocationUpdates();
     }
 */
-
     /**
      * Requests location updates from the FusedLocationApi. Note: we don't call this unless location
      * runtime permission has been granted.
@@ -354,7 +461,6 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
                         mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                                 mLocationCallback, Looper.myLooper());
 
-                        updateUI();
                     }
                 })
                 .addOnFailureListener(this, new OnFailureListener() {
@@ -388,14 +494,6 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
     }
 
     /**
-     * Updates all UI fields.
-     */
-    private void updateUI() {
-        /*setButtonsEnabledState();*/
-        updateLocationUI();
-    }
-
-    /**
      * Disables both buttons when functionality is disabled due to insuffucient location settings.
      * Otherwise ensures that only one button is enabled at any time. The Start Updates button is
      * enabled if the user is not requesting location updates. The Stop Updates button is enabled
@@ -411,27 +509,6 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
         }
     }*/
 
-    /**
-     * Sets the value of the UI fields for the location latitude, longitude and last update time.
-     */
-    private void updateLocationUI() {
-        if (mCurrentLocation != null) {
-         /*   mLatitudeTextView.setText(String.format(Locale.ENGLISH, "%s: %f", mLatitudeLabel,
-                    mCurrentLocation.getLatitude()));
-            mLongitudeTextView.setText(String.format(Locale.ENGLISH, "%s: %f", mLongitudeLabel,
-                    mCurrentLocation.getLongitude()));
-            mLastUpdateTimeTextView.setText(String.format(Locale.ENGLISH, "%s: %s",
-                    mLastUpdateTimeLabel, mLastUpdateTime));*/
-         langitude_in_double=mCurrentLocation.getLongitude();
-            langitude = String.valueOf(langitude_in_double);
-            latitude_in_double=mCurrentLocation.getLatitude();
-            latitude = String.valueOf(langitude_in_double);
-            Log.d(TAG,langitude);
-            Log.d("sudhanshu",String.valueOf(langitude_in_double));
-            googleMap_global.addMarker(new MarkerOptions().position(new LatLng(langitude_in_double,latitude_in_double)).title("park me"));
-        }
-
-    }
 
     /**
      * Removes location updates from the FusedLocationApi.
@@ -466,7 +543,6 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
             requestPermissions();
         }
 
-        updateUI();
     }
 
     @Override
@@ -603,6 +679,22 @@ public class Main2Activity extends AppCompatActivity implements OnMapReadyCallba
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        //finding last location
+        mFusedLocationClient.getLastLocation()
+                .addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            Location mLastLocation = task.getResult();
+                            moveCamera(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), DEFAULT_ZOOM);
+
+                        } else {
+                            Log.w(TAG, "getLastLocation:exception", task.getException());
+                            Toast.makeText(Main2Activity.this, "Unable to find the location.\nPease enage your gps", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
         LatLng park1=new LatLng(23.711986 , 76.504629);
         LatLng park2=new LatLng(24.711986 , 36.504629);
         LatLng park3=new LatLng(28.711986 , 86.504629);

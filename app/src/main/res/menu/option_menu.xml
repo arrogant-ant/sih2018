@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/login"
+        android:icon="@mipmap/ic_login_round"
+        android:title="@string/login" />
+    <item
+        android:id="@+id/nearby"
+        android:icon="@mipmap/ic_parking_round"
+        android:title="@string/nearby" />
+    <item
+        android:id="@+id/help"
+        android:icon="@mipmap/ic_help_round"
+        android:title="@string/help" />
+
+
+</menu>
