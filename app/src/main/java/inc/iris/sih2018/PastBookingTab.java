@@ -38,7 +38,7 @@ public class PastBookingTab extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_booking);
         records=getBookingRecords();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new BookingAdapter(records));
+        recyclerView.setAdapter(new BookingAdapter(records,getActivity()));
         return view;
     }
 

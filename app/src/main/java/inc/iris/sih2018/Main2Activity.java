@@ -34,6 +34,12 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,7 +50,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class Main2Activity extends AppCompatActivity {
+public class Main2Activity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = Main2Activity.class.getSimpleName();
 
@@ -112,13 +118,18 @@ public class Main2Activity extends AppCompatActivity {
     private TextView mLastUpdateTimeTextView;
     private TextView mLatitudeTextView;
     private TextView mLongitudeTextView;
+    private GoogleMap googleMap_global;
 
     // Labels.
     private String mLatitudeLabel;
     private String mLongitudeLabel;
     private String mLastUpdateTimeLabel;
-    private String langitude="";
-    private String latitude="";
+    private String langitude = "";
+    private String latitude = "";
+    private double langitude_in_double =0;
+    private double latitude_in_double =0;
+
+
 
 
     /**
@@ -137,15 +148,6 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-
-        // Locate the UI widgets.
-       /* mStartUpdatesButton = (Button) findViewById(R.id.start_updates_button);
-        mStopUpdatesButton = (Button) findViewById(R.id.stop_updates_button);
-        mLatitudeTextView = (TextView) findViewById(R.id.latitude_text);
-        mLongitudeTextView = (TextView) findViewById(R.id.longitude_text);
-        mLastUpdateTimeTextView = (TextView) findViewById(R.id.last_update_time_text);*/
-
-        // Set labels.
         mLatitudeLabel = getResources().getString(R.string.latitude_label);
         mLongitudeLabel = getResources().getString(R.string.longitude_label);
         mLastUpdateTimeLabel = getResources().getString(R.string.last_update_time_label);
@@ -169,6 +171,9 @@ public class Main2Activity extends AppCompatActivity {
            /* setButtonsEnabledState();*/
             startLocationUpdates();
         }
+        SupportMapFragment mapfragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapfragment.getMapAsync(Main2Activity.this);
+
     }
 
     /**
@@ -242,11 +247,20 @@ public class Main2Activity extends AppCompatActivity {
 
                 mCurrentLocation = locationResult.getLastLocation();
                 mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+                placeMarker(mCurrentLocation);
                 updateUI();
             }
         };
     }
 
+    private void placeMarker(Location location)
+    {
+
+        double lat=location.getLatitude();
+        double longi=location.getLongitude();
+        Log.d("marker",""+lat);
+        googleMap_global.addMarker(new MarkerOptions().position(new LatLng(lat,longi)));
+    }
     /**
      * Uses a {@link com.google.android.gms.location.LocationSettingsRequest.Builder} to build
      * a {@link com.google.android.gms.location.LocationSettingsRequest} that is used for checking
@@ -300,6 +314,7 @@ public class Main2Activity extends AppCompatActivity {
         stopLocationUpdates();
     }
 */
+
     /**
      * Requests location updates from the FusedLocationApi. Note: we don't call this unless location
      * runtime permission has been granted.
@@ -394,9 +409,13 @@ public class Main2Activity extends AppCompatActivity {
                     mCurrentLocation.getLongitude()));
             mLastUpdateTimeTextView.setText(String.format(Locale.ENGLISH, "%s: %s",
                     mLastUpdateTimeLabel, mLastUpdateTime));*/
-            langitude=String.valueOf(mCurrentLocation.getLongitude());
-            latitude=String.valueOf(mCurrentLocation.getLatitude());
-
+         langitude_in_double=mCurrentLocation.getLongitude();
+            langitude = String.valueOf(langitude_in_double);
+            latitude_in_double=mCurrentLocation.getLatitude();
+            latitude = String.valueOf(langitude_in_double);
+            Log.d(TAG,langitude);
+            Log.d("sudhanshu",String.valueOf(langitude_in_double));
+            googleMap_global.addMarker(new MarkerOptions().position(new LatLng(langitude_in_double,latitude_in_double)).title("park me"));
         }
 
     }
@@ -556,5 +575,25 @@ public class Main2Activity extends AppCompatActivity {
                         });
             }
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+            googleMap_global=googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Log.d("shubham",String.valueOf(langitude_in_double));
+
+
+
+
     }
 }

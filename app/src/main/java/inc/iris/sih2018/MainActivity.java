@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(isServiceOk())
         {
-            startActivity(new Intent(this,MapActivity.class));
+            startActivity(new Intent(this,Main2Activity.class));
         }
         else
             Toast.makeText(this, "Issue with services", Toast.LENGTH_SHORT).show();
