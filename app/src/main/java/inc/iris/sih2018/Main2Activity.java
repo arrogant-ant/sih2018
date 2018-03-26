@@ -1,5 +1,8 @@
 package inc.iris.sih2018;
 
+import android.annotation.SuppressLint;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -135,6 +138,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
     private double langitude_in_double =0;
     private double latitude_in_double =0;
     private static final float DEFAULT_ZOOM = 15f;
+    Marker marker_object,parking1,parking2,parking3,parking4;
 
 
 
@@ -242,7 +246,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                     .title(address.getAddressLine(0)));
             moveCamera(latLng,DEFAULT_ZOOM);
         }
-        
+
     }
 
     /**
@@ -307,7 +311,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
             if (savedInstanceState.keySet().contains(KEY_LAST_UPDATED_TIME_STRING)) {
                 mLastUpdateTime = savedInstanceState.getString(KEY_LAST_UPDATED_TIME_STRING);
             }
-
+            updateUI();
         }
     }
 
@@ -364,6 +368,12 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
         double lat=location.getLatitude();
         double lng=location.getLongitude();
         Log.d("marker",""+lat);
+        if(marker_object!=null)
+        {
+            marker_object.remove();
+
+        }
+         marker_object= googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.car)).position(new LatLng(lat,longi)).title("YOU"));
         LatLng latLng=new LatLng(lat,lng);
         googleMap_global.addMarker(markerOptions.position(latLng));
         moveCamera(latLng,DEFAULT_ZOOM);
@@ -392,6 +402,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                     case Activity.RESULT_CANCELED:
                         Log.i(TAG, "User chose not to make required location settings changes.");
                         mRequestingLocationUpdates = false;
+                        updateUI();
                         break;
                 }
                 break;
@@ -679,6 +690,53 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                         }
                     }
                 });
+
+        LatLng park1=new LatLng(23.711986 , 76.504629);
+        LatLng park2=new LatLng(24.711986 , 36.504629);
+        LatLng park3=new LatLng(28.711986 , 86.504629);
+        LatLng park4=new LatLng(65.711986 , 56.504629);
+
+        Log.d("shubham",String.valueOf(langitude_in_double));
+
+        parking1=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park1).title("parking 1"));
+        parking2=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park2).title("parking 2"));
+        parking3=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park3).title("parking 3"));
+        parking4=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.parking)).position(park4).title("parking 4"));
+        googleMap_global.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker)
+            {
+                if(marker.equals(parking1))
+                {
+                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
+                    startActivity(i);
+
+                }
+                if(marker.equals(parking2))
+                {
+                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
+                    startActivity(i);
+
+                }
+                if(marker.equals(parking3))
+                {
+                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
+                    startActivity(i);
+
+                }
+                if(marker.equals(parking4))
+                {
+                    Intent i=new Intent(Main2Activity.this,MainActivity.class);
+                    startActivity(i);
+
+                }
+
+               return true;
+            }
+        });
+
+
+
 
 
 
