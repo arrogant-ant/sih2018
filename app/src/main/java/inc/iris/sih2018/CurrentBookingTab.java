@@ -2,6 +2,7 @@ package inc.iris.sih2018;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import java.util.Calendar;
@@ -44,7 +47,7 @@ public class CurrentBookingTab extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_booking);
         records=getBookingRecords();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new BookingAdapter(records));
+        recyclerView.setAdapter(new BookingAdapter(records,getActivity()));
         return view;
     }
 
@@ -66,6 +69,7 @@ public class CurrentBookingTab extends Fragment {
             }
         });
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);*/
+
 
        return records;
     }

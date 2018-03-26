@@ -1,5 +1,7 @@
 package inc.iris.sih2018;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +20,11 @@ import inc.iris.sih2018.logic.ParkingSlot;
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHolder> {
 
    Booking records[];
+   Context context;
 
-    public BookingAdapter(Booking[] records) {
+    public BookingAdapter(Booking[] records,Context context) {
         this.records = records;
+        this.context=context;
     }
 
     @Override
@@ -63,6 +67,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
             address=itemView.findViewById(R.id.parking_address);
             timeSlot=itemView.findViewById(R.id.time_slot);
             cost=itemView.findViewById(R.id.cost);
+
 
         }
     }
