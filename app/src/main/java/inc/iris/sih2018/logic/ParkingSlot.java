@@ -11,6 +11,9 @@ public class ParkingSlot extends ParkingArea {
     private int slotID;
     private boolean empty;
 
+
+    //gps is , separated lat n lng
+    //capacity store available
     public ParkingSlot(String areaId, String name, String address, String gps, int capacity, int slotID) {
         super(areaId, name, address, gps, capacity);
         this.slotID = slotID;

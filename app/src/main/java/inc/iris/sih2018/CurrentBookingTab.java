@@ -27,11 +27,13 @@ import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import inc.iris.sih2018.logic.Booking;
 import inc.iris.sih2018.logic.BookingStatus;
 import inc.iris.sih2018.logic.ParkingSlot;
+import inc.iris.sih2018.logic.Parse;
 import inc.iris.sih2018.logic.VolleySingleton;
 
 
@@ -41,6 +43,7 @@ import inc.iris.sih2018.logic.VolleySingleton;
 public class CurrentBookingTab extends Fragment {
 
     private static final String TAG = "CurrentBookingTab";
+    private List<Booking> list;
 
     private RecyclerView recyclerView;
     private Booking records[];
@@ -59,52 +62,47 @@ public class CurrentBookingTab extends Fragment {
         records=getBookingRecords();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new BookingAdapter(records,getActivity()));
+        //
+        requestDate("jaya4svm@gmail.com");
         return view;
     }
-
-    public Booking[] getBookingRecords() {
-        long currentTime=Calendar.getInstance().getTimeInMillis();
-        ParkingSlot slot=new ParkingSlot("1","BIT","Sindri","12212:111",400,1);
-        Booking record=new Booking(currentTime,currentTime+60000,currentTime+60*60000,slot,"jh 01 aa 1234", BookingStatus.PARKED);
-        Booking records[]={record,record};
-        //TODO use volley to get records
-       /* StringRequest request=new StringRequest(Request.Method.GET, "url", new Response.Listener<String>() {
+    private void requestDate(final String user)
+    {
+        StringRequest request=new StringRequest(Request.Method.GET, "url", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                parseResponse(response);
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);*/
-        JsonObjectRequest request=new JsonObjectRequest(Request.Method.POST,url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Toast.makeText(getActivity(), "json "+response, Toast.LENGTH_SHORT).show();
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Log.e(TAG, "onErrorResponse: "+error);
-                Toast.makeText(getContext(), "error "+error, Toast.LENGTH_SHORT).show();
 
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param=new HashMap<>();
-                param.put("user","jaya4svm@gmail.com");
+                param.put("user",user);
                 return param;
             }
         };
-
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);
+
+    }
+
+    public Booking[] getBookingRecords() {
+        long currentTime=Calendar.getInstance().getTimeInMillis();
+        ParkingSlot slot=new ParkingSlot("1","BIT","Sindri","12212:111",400,1);
+        final Booking record=new Booking(currentTime+60000,currentTime+60*60000,slot,"jh 01 aa 1234", BookingStatus.PARKED);
+        Booking records[]={record,record};
+        //TODO use volley to get records
+
+
        return records;
+    }
+
+    private void parseResponse(String response) {
     }
 
     public String getURL() {

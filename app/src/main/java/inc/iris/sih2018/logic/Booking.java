@@ -14,7 +14,7 @@ public class Booking {
      * schDeparture= scheduled depature
      * TIME_UNIT= smallest parking time measure unit
      */
-    private long transactionTime,schArrival, schDeparture;
+    private long schArrival, schDeparture;
     private int bookingDuration, bookingCost;
     private ParkingSlot slot;
     private final int TIME_UNIT=1000*60*60;//FOR ONE HOUR
@@ -22,8 +22,8 @@ public class Booking {
     private BookingStatus status;
 
 
-    public Booking(long transactionTime, long schArrival, long schDeparture, ParkingSlot slot, String vehicleID, BookingStatus status) {
-        this.transactionTime = transactionTime;
+    public Booking( long schArrival, long schDeparture, ParkingSlot slot, String vehicleID, BookingStatus status) {
+
         this.schArrival = schArrival;
         this.schDeparture = schDeparture;
         this.slot = slot;
@@ -58,9 +58,6 @@ public class Booking {
         return arrival+" - "+departure;
     }
 
-    public long getTransactionTime() {
-        return transactionTime;
-    }
 
     public int getBookingDuration() {
         return bookingDuration;
@@ -92,6 +89,12 @@ public class Booking {
 
     public void setStatus(BookingStatus status) {
         this.status = status;
+    }
+
+    public static String[] getKeySet()
+    {
+        String[] key={"arrival","departure","slotID","name","address","gps","capacity","slotID","vehicleID","status"};
+        return  key;
     }
 
 
