@@ -150,7 +150,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     private String latitude = "";
     private double langitude_in_double =0;
     private double latitude_in_double =0;
-    private static final float DEFAULT_ZOOM = 15f;
+    private static final float DEFAULT_ZOOM = 12f;
     Marker marker_object,parking1,parking2,parking3,parking4;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     protected GeoDataClient mGeoDataClient;
@@ -295,6 +295,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
                 startActivity(new Intent(MapActivity.this,Login.class));
                 return true;
             case R.id.nearby:
+                startActivity(new Intent(this,nearby_parking.class));
                 Toast.makeText(this, "nearby", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.help:

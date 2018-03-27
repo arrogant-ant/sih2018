@@ -2,32 +2,16 @@ package inc.iris.sih2018;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -56,7 +40,9 @@ public class Login extends AppCompatActivity {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showRegisterDialog();
+                startActivity(new Intent(Login.this,Bookings.class));
+
+               // showRegisterDialog();
             }
         });
         btn_signin.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +68,6 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                btn_signin.setEnabled(false);
 
                 //check validation
                 if(TextUtils.isEmpty(editMail.getText().toString()))
@@ -187,5 +172,6 @@ public class Login extends AppCompatActivity {
         dialog.show();
 
     }
+
 
 }
