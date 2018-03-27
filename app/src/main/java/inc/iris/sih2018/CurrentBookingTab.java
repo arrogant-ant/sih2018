@@ -6,19 +6,28 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONObject;
+
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import inc.iris.sih2018.logic.Booking;
 import inc.iris.sih2018.logic.BookingStatus;
@@ -31,9 +40,11 @@ import inc.iris.sih2018.logic.VolleySingleton;
  */
 public class CurrentBookingTab extends Fragment {
 
+    private static final String TAG = "CurrentBookingTab";
 
     private RecyclerView recyclerView;
     private Booking records[];
+    private String url ="http://sih2018.esy.es/user_current.php";
     public CurrentBookingTab() {
         // Required empty public constructor
     }
@@ -69,8 +80,34 @@ public class CurrentBookingTab extends Fragment {
             }
         });
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);*/
+        JsonObjectRequest request=new JsonObjectRequest(Request.Method.POST,url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(getActivity(), "json "+response, Toast.LENGTH_SHORT).show();
 
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.e(TAG, "onErrorResponse: "+error);
+                Toast.makeText(getContext(), "error "+error, Toast.LENGTH_SHORT).show();
 
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> param=new HashMap<>();
+                param.put("user","jaya4svm@gmail.com");
+                return param;
+            }
+        };
+
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);
        return records;
+    }
+
+    public String getURL() {
+        return url+"?user=jaya4svm@gmail.com";
     }
 }

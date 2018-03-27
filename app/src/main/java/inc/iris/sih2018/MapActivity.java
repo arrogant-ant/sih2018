@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -15,16 +14,13 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,7 +28,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -76,13 +71,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import inc.iris.sih2018.logic.Booking;
 import inc.iris.sih2018.logic.PlaceAutocompleteAdapter;
 
 
-public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
+public class MapActivity extends AppCompatActivity implements  OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = Main2Activity.class.getSimpleName();
+    private static final String TAG = MapActivity.class.getSimpleName();
 
     /**
      * Code used in requesting runtime permissions.
@@ -156,7 +150,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
     private String latitude = "";
     private double langitude_in_double =0;
     private double latitude_in_double =0;
-    private static final float DEFAULT_ZOOM = 15f;
+    private static final float DEFAULT_ZOOM = 12f;
     Marker marker_object,parking1,parking2,parking3,parking4;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     protected GeoDataClient mGeoDataClient;
@@ -181,7 +175,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.map_activity);
 
         //set ui
         initUI();
@@ -212,7 +206,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
         }
         SupportMapFragment mapfragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapview=mapfragment.getView();
-        mapfragment.getMapAsync(Main2Activity.this);
+        mapfragment.getMapAsync(MapActivity.this);
         Log.d(TAG,"init keyboard");
 
 
@@ -226,7 +220,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
         setSupportActionBar(toolbar);
         // Construct a GeoDataClient.
         mGeoDataClient = Places.getGeoDataClient(this, null);
-        placeAutocompleteAdapter=new PlaceAutocompleteAdapter(Main2Activity.this,mGeoDataClient,BOUNDS_INDIA,null);
+        placeAutocompleteAdapter=new PlaceAutocompleteAdapter(MapActivity.this,mGeoDataClient,BOUNDS_INDIA,null);
         search_et=findViewById(R.id.input_search);
         search_et.setAdapter(placeAutocompleteAdapter);
         search_et.setOnItemClickListener(mAutoCompleteListener);
@@ -298,9 +292,10 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.login:
-                Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MapActivity.this,Login.class));
                 return true;
             case R.id.nearby:
+                startActivity(new Intent(this,nearby_parking.class));
                 Toast.makeText(this, "nearby", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.help:
@@ -471,7 +466,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                         Log.i(TAG, "All location settings are satisfied.");
 
                         //noinspection MissingPermission
-                        if (ActivityCompat.checkSelfPermission(Main2Activity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Main2Activity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             // TODO: Consider calling
                             //    ActivityCompat#requestPermissions
                             // here to request the missing permissions, and then overriding
@@ -498,7 +493,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                                     // Show the dialog by calling startResolutionForResult(), and check the
                                     // result in onActivityResult().
                                     ResolvableApiException rae = (ResolvableApiException) e;
-                                    rae.startResolutionForResult(Main2Activity.this, REQUEST_CHECK_SETTINGS);
+                                    rae.startResolutionForResult(MapActivity.this, REQUEST_CHECK_SETTINGS);
                                 } catch (IntentSender.SendIntentException sie) {
                                     Log.i(TAG, "PendingIntent unable to execute request.");
                                 }
@@ -507,7 +502,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                                 String errorMessage = "Location settings are inadequate, and cannot be " +
                                         "fixed here. Fix in Settings.";
                                 Log.e(TAG, errorMessage);
-                                Toast.makeText(Main2Activity.this, errorMessage, Toast.LENGTH_LONG).show();
+                                Toast.makeText(MapActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                                 mRequestingLocationUpdates = false;
                         }
 
@@ -625,7 +620,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                         @Override
                         public void onClick(View view) {
                             // Request permission
-                            ActivityCompat.requestPermissions(Main2Activity.this,
+                            ActivityCompat.requestPermissions(MapActivity.this,
                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                     REQUEST_PERMISSIONS_REQUEST_CODE);
                         }
@@ -635,7 +630,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
             // Request permission. It's possible this can be auto answered if device policy
             // sets the permission in a given state or the user denied the permission
             // previously and checked "Never ask again".
-            ActivityCompat.requestPermissions(Main2Activity.this,
+            ActivityCompat.requestPermissions(MapActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
@@ -725,7 +720,7 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
 
                         } else {
                             Log.w(TAG, "getLastLocation:exception", task.getException());
-                            Toast.makeText(Main2Activity.this, "Unable to find the location.\nPease enage your gps", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MapActivity.this, "Unable to find the location.\nPease enage your gps", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -756,13 +751,13 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
             {
                 if(marker.equals(parking1))
                 {
-                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(Main2Activity.this);
+                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(MapActivity.this);
                     alertDialog.setMessage("Book Your Parking IN Parking Area 1")
                             .setTitle("Booking");
                     alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Main2Activity.this, Bookings.class));
+                            startActivity(new Intent(MapActivity.this, Bookings.class));
                         }
                     });
                     alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -777,13 +772,13 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                 }
                 if(marker.equals(parking2))
                 {
-                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(Main2Activity.this);
+                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(MapActivity.this);
                     alertDialog.setMessage("Book Your Parking IN Parking Area 2")
                             .setTitle("Booking");
                     alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Main2Activity.this, Bookings.class));
+                            startActivity(new Intent(MapActivity.this, Bookings.class));
                         }
                     });
                     alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -796,13 +791,13 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                 }
                 if(marker.equals(parking3))
                 {
-                    final AlertDialog.Builder alertDialog=new AlertDialog.Builder(Main2Activity.this);
+                    final AlertDialog.Builder alertDialog=new AlertDialog.Builder(MapActivity.this);
                     alertDialog.setMessage("Book Your Parking IN Parking Area 3")
                             .setTitle("Booking");
                     alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Main2Activity.this, Bookings.class));
+                            startActivity(new Intent(MapActivity.this, Bookings.class));
                         }
                     });
                     alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -816,13 +811,13 @@ public class Main2Activity extends AppCompatActivity implements  OnMapReadyCallb
                 }
                 if(marker.equals(parking4))
                 {
-                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(Main2Activity.this);
+                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(MapActivity.this);
                     alertDialog.setMessage("Book Your Parking IN Parking Area 4")
                             .setTitle("Booking");
                     alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Main2Activity.this, Bookings.class));
+                            startActivity(new Intent(MapActivity.this, Bookings.class));
                         }
                     });
                     alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
