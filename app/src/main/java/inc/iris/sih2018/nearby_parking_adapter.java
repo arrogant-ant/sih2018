@@ -7,16 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class nearby_parking_adapter extends  RecyclerView.Adapter<nearby_parking_adapter.MyViewHolder> {
     List<nearby_parking_bean> beanList;
+    private ClickListener clickListener;
     Context context;
+
     public nearby_parking_adapter(List<nearby_parking_bean> gList, Context c) {
         this.beanList = gList;
         this.context = c;
+    }
+
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -38,59 +45,37 @@ public class nearby_parking_adapter extends  RecyclerView.Adapter<nearby_parking
     public int getItemCount() {
         return beanList.size();
     }
-//    public void setFilter(List<nearby_parking_bean> user){
-//        beanList=new ArrayList<>();
-//        beanList.addAll(user);
-//        notifyDataSetChanged();
-//    }
+
+    public interface ClickListener {
+        void itemClicked(View v, int position);
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView imageView;
         TextView name;
         TextView distance;
         TextView slots;
-      //  TextView cost;
+        //  TextView cost;
 
         MyViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.parking_name);
             distance = (TextView) itemView.findViewById(R.id.distance);
             slots = (TextView) itemView.findViewById(R.id.slots);
-          //  cost = (TextView) itemView.findViewById(R.id.costss);
+            //  cost = (TextView) itemView.findViewById(R.id.costss);
             imageView = (ImageView) itemView.findViewById(R.id.parking_img);
-    //        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-//            Bitmap bitmap = BitmapFactory.decodeResource(imageView.getResources(),R.drawable.images);
-//            imageView.setImageBitmap(transform(bitmap));
-            //itemView.setOnClickListener(this);
         }
-//        public Bitmap transform(Bitmap source) {
-//            int size = Math.min(source.getWidth(),source.getHeight());
-//            int x = (source.getWidth()-size)/2;
-//            int y = (source.getHeight()-size)/2;
-//            Bitmap bitmap = Bitmap.createBitmap(source,x,y,size,size);
-//            if(bitmap!=source){
-//                source.recycle();
-//
-//            }
-//            Bitmap nbitmap = Bitmap.createBitmap(size,size,source.getConfig());
-//            Canvas c = new Canvas(nbitmap);
-//            Paint p = new Paint();
-//            BitmapShader bs = new BitmapShader(bitmap,BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
-//            p.setShader(bs);
-//            p.setColor(Color.BLACK);
-//            p.setShadowLayer(4.0f,0.0f,2.0f, Color.GRAY);
-//            p.setAntiAlias(true);
-//            float r = size/2f;
-//            c.drawCircle(r,r,r,p);
-//            bitmap.recycle();
-//            return nbitmap;
-//
 
-    //    }
         @Override
         public void onClick(View v) {
-            //if (clickListener != null) {
-            //    clickListener.itemClicked(v, getPosition());
+            if (clickListener != null) {
+                clickListener.itemClicked(v, getPosition());
+            }
+            else
+            {
+                Toast.makeText(context, "not clicked", Toast.LENGTH_SHORT).show();
+            }
         }
-    }
 
+    }
 }
