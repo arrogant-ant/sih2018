@@ -44,8 +44,8 @@ public class UpComingBookingTab extends Fragment {
     public Booking[] getBookingRecords() {
         long currentTime= Calendar.getInstance().getTimeInMillis();
         ParkingSlot slot=new ParkingSlot("1","BIT","Sindri","12212:111",400,1);
-        Booking record=new Booking(currentTime,currentTime+60000,currentTime+60*60000,slot,"jh 01 aa 1234", BookingStatus.CONFIRMED);
-        Booking records[]={record,record,record,record};
+       // Booking record=new Booking(currentTime,currentTime+60000,currentTime+60*60000,slot,"jh 01 aa 1234", BookingStatus.CONFIRMED);
+        //Booking records[]={record,record,record,record};
         return records;
     }
 
