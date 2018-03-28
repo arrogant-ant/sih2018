@@ -8,12 +8,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import inc.iris.sih2018.logic.Booking;
 import inc.iris.sih2018.logic.BookingStatus;
 import inc.iris.sih2018.logic.ParkingSlot;
+import inc.iris.sih2018.logic.Parse;
+import inc.iris.sih2018.logic.VolleySingleton;
 
 
 /**
@@ -36,18 +47,44 @@ public class PastBookingTab extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_booking_tab, container, false);
         recyclerView=view.findViewById(R.id.recycler_booking);
-        records=getBookingRecords();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new BookingAdapter(records,getActivity()));
+        //
+        requestDate("jaya4svm@gmail.com");
+
         return view;
     }
 
-    public Booking[] getBookingRecords() {
-        long currentTime= Calendar.getInstance().getTimeInMillis();
-        ParkingSlot slot=new ParkingSlot("1","BIT","Sindri","12212:111",400,1);
-        Booking record=new Booking(currentTime,currentTime+60000,currentTime+60*60000,slot,"jh 01 aa 1234", BookingStatus.COMPLETED);
-        Booking records[]={record,record,record};
-        return records;
+    private void requestDate(final String user)
+    {
+        StringRequest request=new StringRequest(Request.Method.GET, "url", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                parseResponse(response);
+                Toast.makeText(getActivity(), "res "+response, Toast.LENGTH_SHORT).show();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> param=new HashMap<>();
+                param.put("user",user);
+                return param;
+            }
+        };
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);
+
+    }
+
+
+    private void parseResponse(String response) {
+        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity()));
+
     }
 }
 

@@ -14,14 +14,14 @@ public class ParkingSlot extends ParkingArea {
 
     //gps is , separated lat n lng
     //capacity store available
-    public ParkingSlot(String areaId, String name, String address, String gps, int capacity, int slotID) {
-        super(areaId, name, address, gps, capacity);
+    public ParkingSlot(String areaId, String name, String gps, int capacity, int slotID) {
+        super(areaId, name, gps, capacity);
         this.slotID = slotID;
         this.empty = true;
     }
 
-    public ParkingSlot(String areaId, String name, String address, String gps, int capacity, int rate, int slotID) {
-        super(areaId, name, address, gps, capacity, rate);
+    public ParkingSlot(String areaId, String name, String gps, int capacity, int rate, int slotID) {
+        super(areaId, name, gps, capacity, rate);
         this.slotID = slotID;
         this.empty=true;
     }

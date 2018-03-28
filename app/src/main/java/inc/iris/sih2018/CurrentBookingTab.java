@@ -43,10 +43,8 @@ import inc.iris.sih2018.logic.VolleySingleton;
 public class CurrentBookingTab extends Fragment {
 
     private static final String TAG = "CurrentBookingTab";
-    private List<Booking> list;
 
     private RecyclerView recyclerView;
-    private Booking records[];
     private String url ="http://sih2018.esy.es/user_current.php";
     public CurrentBookingTab() {
         // Required empty public constructor
@@ -59,19 +57,18 @@ public class CurrentBookingTab extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_booking_tab, container, false);
         recyclerView=view.findViewById(R.id.recycler_booking);
-        records=getBookingRecords();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new BookingAdapter(records,getActivity()));
         //
         requestDate("jaya4svm@gmail.com");
         return view;
     }
     private void requestDate(final String user)
     {
-        StringRequest request=new StringRequest(Request.Method.GET, "url", new Response.Listener<String>() {
+        StringRequest request=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 parseResponse(response);
+                Toast.makeText(getActivity(), "res "+response, Toast.LENGTH_SHORT).show();
 
             }
         }, new Response.ErrorListener() {
@@ -91,21 +88,10 @@ public class CurrentBookingTab extends Fragment {
 
     }
 
-    public Booking[] getBookingRecords() {
-        long currentTime=Calendar.getInstance().getTimeInMillis();
-        ParkingSlot slot=new ParkingSlot("1","BIT","Sindri","12212:111",400,1);
-        final Booking record=new Booking(currentTime+60000,currentTime+60*60000,slot,"jh 01 aa 1234", BookingStatus.PARKED);
-        Booking records[]={record,record};
-        //TODO use volley to get records
-
-
-       return records;
-    }
 
     private void parseResponse(String response) {
+        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity()));
+
     }
 
-    public String getURL() {
-        return url+"?user=jaya4svm@gmail.com";
-    }
 }

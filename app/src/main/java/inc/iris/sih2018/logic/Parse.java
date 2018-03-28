@@ -10,9 +10,11 @@ import org.json.JSONObject;
 
 
 public class Parse {
-    public static Booking[] getBooking(JSONObject json, BookingStatus status) {
+    public static Booking[] getBooking(String  response, BookingStatus status) {
+
         int i;
         try {
+            JSONObject json=new JSONObject(response);
             JSONArray array = json.getJSONArray("server_response");
             Booking[] list = new Booking[array.length()];
             for (i = 0; i < array.length(); i++) {
@@ -23,7 +25,6 @@ public class Parse {
                         new ParkingSlot(
                                 object.getString("slotID"),
                                 object.getString("name"),
-                                object.getString("address"),
                                 object.getString("gps"),
                                 object.getInt("capacity"),
                                 object.getInt("slotID")
@@ -39,4 +40,7 @@ public class Parse {
         return null;
 
     }
+
+
+
 }
