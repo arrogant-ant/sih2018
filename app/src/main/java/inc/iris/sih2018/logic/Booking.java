@@ -1,6 +1,7 @@
 package inc.iris.sih2018.logic;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by Sud on 3/16/18.
@@ -14,7 +15,8 @@ public class Booking {
      * schDeparture= scheduled depature
      * TIME_UNIT= smallest parking time measure unit
      */
-    private long schArrival, schDeparture;
+    private Calendar schArrival;
+    private Calendar schDeparture;
     private int bookingDuration, bookingCost;
     private ParkingSlot slot;
     private final int TIME_UNIT=1000*60*60;//FOR ONE HOUR
@@ -22,30 +24,30 @@ public class Booking {
     private BookingStatus status;
 
 
-    public Booking( long schArrival, long schDeparture, ParkingSlot slot, String vehicleID, BookingStatus status) {
+    public Booking(Calendar schArrival, Calendar schDeparture, ParkingSlot slot, String vehicleID, BookingStatus status) {
 
         this.schArrival = schArrival;
         this.schDeparture = schDeparture;
         this.slot = slot;
-        bookingDuration = (int)Math.ceil((double)(schDeparture -schArrival)/TIME_UNIT);
+        bookingDuration = (int)Math.ceil((double)(schDeparture.getTimeInMillis() -schArrival.getTimeInMillis())/TIME_UNIT);
         bookingCost=bookingDuration*slot.getRate();
         this.vehicleID=vehicleID;
         this.status=status;
     }
 
-    public long getSchArrival() {
+    public Calendar getSchArrival() {
         return schArrival;
     }
 
-    public void setSchArrival(long schArrival) {
+    public void setSchArrival(Calendar schArrival) {
         this.schArrival = schArrival;
     }
 
-    public long getSchDeparture() {
+    public Calendar getSchDeparture() {
         return schDeparture;
     }
 
-    public void setSchDeparture(long schDepature) {
+    public void setSchDeparture(Calendar schDepature) {
         this.schDeparture = schDepature;
     }
 
@@ -91,11 +93,6 @@ public class Booking {
         this.status = status;
     }
 
-    public static String[] getKeySet()
-    {
-        String[] key={"arrival","departure","slotID","name","address","gps","capacity","slotID","vehicleID","status"};
-        return  key;
-    }
 
 
 }

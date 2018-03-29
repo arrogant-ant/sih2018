@@ -283,7 +283,11 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.option_menu, menu);
+        if(Login.user==null) {
+            inflater.inflate(R.menu.option_menu, menu);
+        }
+        else
+            inflater.inflate(R.menu.signout_menu,menu);
         return true;
     }
 
@@ -291,11 +295,14 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.login:
+            case R.id.login_menu:
                 startActivity(new Intent(MapActivity.this,Login.class));
                 return true;
-            case R.id.nearby:
-                startActivity(new Intent(this,nearby_parking.class));
+            case R.id.signout_menu:
+                startActivity(new Intent(MapActivity.this,Login.class));
+                return true;
+            case R.id.bookings_menu:
+                startActivity(new Intent(this,Bookings.class));
                 Toast.makeText(this, "nearby", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.help:

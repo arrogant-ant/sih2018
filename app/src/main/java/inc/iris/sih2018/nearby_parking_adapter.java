@@ -58,27 +58,16 @@ public class nearby_parking_adapter extends RecyclerView.Adapter<nearby_parking_
         TextView distance;
         TextView slots;
         FrameLayout parentLayout;
-        //  TextView cost;
 
         MyViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.parking_name);
             distance = (TextView) itemView.findViewById(R.id.distance);
             slots = (TextView) itemView.findViewById(R.id.slots);
-            //  cost = (TextView) itemView.findViewById(R.id.costss);
             imageView = (ImageView) itemView.findViewById(R.id.parking_img);
             parentLayout = itemView.findViewById(R.id.parentLayout);
         }
 
-        /*@Override
-        public void onClick(View v) {
-            if (clickListener != null) {
-                clickListener.itemClicked(v, getPosition());
-            }
-            else
-            {
-                Toast.makeText(context, "not clicked", Toast.LENGTH_SHORT).show();
-            }*/
     }
 
 }
