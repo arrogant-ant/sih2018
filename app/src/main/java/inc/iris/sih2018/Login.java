@@ -3,6 +3,7 @@ package inc.iris.sih2018;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -118,6 +119,9 @@ public class Login extends AppCompatActivity {
                         switch (response) {
                             //valid Login
                             case "success":
+
+                                inc.iris.sih2018.MapActivity.editor.putString("login_value",username);
+                                inc.iris.sih2018.MapActivity.editor.commit();
                                 Login.user=username;
                                 startActivity(new Intent(Login.this,MapActivity.class));
                                 break;

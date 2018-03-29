@@ -1,6 +1,7 @@
 package inc.iris.sih2018;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +41,9 @@ public class nearby_parking_adapter extends RecyclerView.Adapter<nearby_parking_
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "clicked " + gallary.getName(), Toast.LENGTH_SHORT).show();
+                Intent i=new Intent(context,activity_time.class);
+                context.startActivity(i);
+
             }
         });
     }
