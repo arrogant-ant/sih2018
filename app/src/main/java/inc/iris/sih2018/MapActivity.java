@@ -303,7 +303,6 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
                 return true;
             case R.id.bookings_menu:
                 startActivity(new Intent(this,Bookings.class));
-                Toast.makeText(this, "nearby", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.help:
                 Toast.makeText(this, "help", Toast.LENGTH_SHORT).show();
@@ -878,5 +877,9 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    public void getNearBy(View view) {
+        startActivity(new Intent(this,nearby_parking.class));
     }
 }

@@ -4,24 +4,32 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 /**
  * Created by Sud on 3/27/18.
  */
 
 
 public class Parse {
-    public static Booking[] getBooking(String  response, BookingStatus status) {
+    public static Booking[] getBooking(String response, BookingStatus status) {
 
         int i;
         try {
-            JSONObject json=new JSONObject(response);
+            JSONObject json = new JSONObject(response);
             JSONArray array = json.getJSONArray("server_response");
+            Calendar arrival, departure;
+            arrival = Calendar.getInstance();
+            departure = Calendar.getInstance();
             Booking[] list = new Booking[array.length()];
             for (i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
+                arrival.setTimeInMillis(object.getLong("arrival"));
+                departure.setTimeInMillis(object.getLong("departure"));
+
                 list[i] = new Booking(
-                        object.getLong("arrival"), //arrival
-                        object.getLong("departure"), //
+                        arrival, //arrival
+                        departure, //
                         new ParkingSlot(
                                 object.getString("areaID"),
                                 object.getString("name"),
@@ -41,7 +49,6 @@ public class Parse {
         return null;
 
     }
-
 
 
 }

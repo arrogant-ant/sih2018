@@ -25,6 +25,7 @@ public class Bookings extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Past"));
         tabLayout.addTab(tabLayout.newTab().setText("Current"));
         tabLayout.addTab(tabLayout.newTab().setText("Upcoming"));
+        tabLayout.addTab(tabLayout.newTab().setText("Monthly"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         Fragment tabs[]=new Fragment[]{new PastBookingTab(),new CurrentBookingTab(),new UpComingBookingTab()};
 
