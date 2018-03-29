@@ -42,6 +42,7 @@ public class nearby_parking_adapter extends RecyclerView.Adapter<nearby_parking_
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(context,activity_time.class);
+                i.putExtra("park_Area",gallary.getName());
                 context.startActivity(i);
 
             }
