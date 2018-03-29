@@ -757,7 +757,15 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
                     alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(MapActivity.this, Bookings.class));
+                            Uri.Builder builder = new Uri.Builder();
+                            builder.scheme("https")
+                                    .authority("www.google.com").appendPath("maps").appendPath("dir").appendPath("").appendQueryParameter("api", "1")
+                                    .appendQueryParameter("destination", 80.00023 + "," + 13.0783);
+                            String url = builder.build().toString();
+                            Log.d("Directions", url);
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
                         }
                     });
                     alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
