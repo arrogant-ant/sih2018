@@ -3,11 +3,11 @@
     <item
         android:id="@+id/signout_menu"
         android:icon="@mipmap/ic_login_round"
-        android:title="@string/login" />
+        android:title="@string/logout" />
     <item
         android:id="@+id/bookings_menu"
         android:icon="@mipmap/ic_parking_round"
-        android:title="@string/nearby" />
+        android:title="@string/bookings" />
     <item
         android:id="@+id/help"
         android:icon="@mipmap/ic_help_round"

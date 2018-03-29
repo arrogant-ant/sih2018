@@ -17,9 +17,13 @@ public class Booking {
      */
     private Calendar schArrival;
     private Calendar schDeparture;
-    private int bookingDuration, bookingCost;
+    private int bookingDuration;
+
+
+
+    private int bookingCost;
     private ParkingSlot slot;
-    private final int TIME_UNIT=1000*60*60;//FOR ONE HOUR
+    private static final int TIME_UNIT = 1000 * 60 * 60;//FOR ONE HOUR
     private String vehicleID; //can be vehicle no;
     private BookingStatus status;
 
@@ -29,10 +33,10 @@ public class Booking {
         this.schArrival = schArrival;
         this.schDeparture = schDeparture;
         this.slot = slot;
-        bookingDuration = (int)Math.ceil((double)(schDeparture.getTimeInMillis() -schArrival.getTimeInMillis())/TIME_UNIT);
-        bookingCost=bookingDuration*slot.getRate();
-        this.vehicleID=vehicleID;
-        this.status=status;
+        bookingDuration = (int) Math.ceil((double) (schDeparture.getTimeInMillis() - schArrival.getTimeInMillis()) / TIME_UNIT);
+        bookingCost = bookingDuration * slot.getRate();
+        this.vehicleID = vehicleID;
+        this.status = status;
     }
 
     public Calendar getSchArrival() {
@@ -51,13 +55,12 @@ public class Booking {
         this.schDeparture = schDepature;
     }
 
-    public String getTimeSlot()
-    {
+    public String getTimeSlot() {
         String arrival, departure;
-        SimpleDateFormat timeFormat=new SimpleDateFormat("hh:mm aaa");
-        arrival= timeFormat.format(getSchArrival());
-        departure=timeFormat.format(getSchDeparture());
-        return arrival+" - "+departure;
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aaa");
+        arrival = timeFormat.format(getSchArrival());
+        departure = timeFormat.format(getSchDeparture());
+        return arrival + " - " + departure;
     }
 
 
@@ -71,14 +74,15 @@ public class Booking {
 
     //slot can only be changed if car not parked
     public boolean setSlot(ParkingSlot slot) {
-        if(status==BookingStatus.PARKED)
+        if (status == BookingStatus.PARKED)
             return false;
         this.slot = slot;
         return true;
     }
-
-    public int getBookingCost() {
-        return bookingCost;
+//static method to get estimated boking cost
+    public static int getBookingCost(long arrivalTime, long departureTime, int cost) {
+        int time = (int) (departureTime - arrivalTime) / TIME_UNIT;
+        return time * cost;
     }
 
     public String getVehicleID() {
@@ -93,6 +97,9 @@ public class Booking {
         this.status = status;
     }
 
+    public int getBookingCost() {
+        return bookingCost;
+    }
 
 
 }

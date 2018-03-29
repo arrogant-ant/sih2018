@@ -137,23 +137,16 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
      * Represents a geographical location.
      */
     private Location mCurrentLocation;
-    static SharedPreferences sharedPreferences;
-    static SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     //UI
     private Toolbar toolbar;
     private MarkerOptions markerOptions;
     private Marker searchMarker ;
     private AutoCompleteTextView search_et;
-    int login_value;
 
     // Labels.
-    private String mLatitudeLabel;
-    private String mLongitudeLabel;
-    private String mLastUpdateTimeLabel;
-    private String langitude = "";
-    private String latitude = "";
-    private double langitude_in_double =0;
-    private double latitude_in_double =0;
+
     private static final float DEFAULT_ZOOM = 12f;
     Marker marker_object,parking1,parking2,parking3,parking4;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
@@ -180,15 +173,12 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
-        sharedPreferences = getApplicationContext().getSharedPreferences("MyPref", 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        sharedPreferences = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE );
+        editor = sharedPreferences.edit();
 
         //set ui
         initUI();
-        // Set labels.
-        mLatitudeLabel = getResources().getString(R.string.latitude_label);
-        mLongitudeLabel = getResources().getString(R.string.longitude_label);
-        mLastUpdateTimeLabel = getResources().getString(R.string.last_update_time_label);
+
 
         mRequestingLocationUpdates = false;
         mLastUpdateTime = "";
@@ -289,13 +279,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-         // 0 - for private mode
-
-
-
-
-        login_value=sharedPreferences.getInt("login_value",0);
-        if(login_value==0) {
+        if(Login.user==null) {
             inflater.inflate(R.menu.option_menu, menu);
 
         }
@@ -312,24 +296,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
                 startActivity(new Intent(MapActivity.this,Login.class));
                 return true;
             case R.id.signout_menu:
-                final AlertDialog.Builder alertdialog=new AlertDialog.Builder(this);
-                alertdialog.setTitle("Logout");
-                alertdialog.setMessage("Click Yes To Logout");
-                alertdialog.setPositiveButton("LOGOUT", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(MapActivity.this,MapActivity.class));
-                        inc.iris.sih2018.MapActivity.editor.putString("user",null);
-                        inc.iris.sih2018.MapActivity.editor.commit();
-                        finish();
-                    }
-                });
-                alertdialog.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                      dialog.dismiss();
-                    }
-                });
+                new Login().signOut();
                 return true;
             case R.id.bookings_menu:
                 startActivity(new Intent(this,Bookings.class));
@@ -775,7 +742,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
         LatLng park3=new LatLng(28.711986 , 86.504629);
         LatLng park4=new LatLng(65.711986 , 56.504629);
 
-        Log.d("shubham",String.valueOf(langitude_in_double));
+
 
         parking1=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park1).title("parking 1"));
         parking2=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park2).title("parking 2"));

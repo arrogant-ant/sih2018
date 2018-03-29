@@ -33,6 +33,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Login extends AppCompatActivity {
     private static final String TAG ="Login" ;
+    public static final String PREF_TAG="username";
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     Button btn_signin, btn_register;
     RelativeLayout relativelayout;
     private final String loginURL = "http://www.sih2018.esy.es/login.php";
@@ -66,6 +69,10 @@ public class Login extends AppCompatActivity {
                 showSigninDiaog();
             }
         });
+
+        //shared pref
+        sharedPreferences = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE );
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
     }
 
@@ -120,8 +127,8 @@ public class Login extends AppCompatActivity {
                             //valid Login
                             case "success":
 
-                                inc.iris.sih2018.MapActivity.editor.putString("login_value",username);
-                                inc.iris.sih2018.MapActivity.editor.commit();
+                               editor.putString(PREF_TAG,username);
+                               editor.commit();
                                 Login.user=username;
                                 startActivity(new Intent(Login.this,MapActivity.class));
                                 break;
@@ -239,6 +246,7 @@ public class Login extends AppCompatActivity {
                         switch (response) {
                             //valid Login
                             case "success":
+
                                 Login.user=username;
                                 startActivity(new Intent(Login.this,MapActivity.class));
                                 break;
@@ -288,6 +296,28 @@ public class Login extends AppCompatActivity {
             }
         });
         dialog.show();
+
+    }
+    public void signOut()
+    {
+        final android.app.AlertDialog.Builder alertdialog=new android.app.AlertDialog.Builder(this);
+        alertdialog.setTitle("Logout");
+        alertdialog.setMessage("Click Yes To Logout");
+        alertdialog.setPositiveButton("LOGOUT", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Login.this,MapActivity.class));
+                editor.putString("user",null);
+                editor.commit();
+                finish();
+            }
+        });
+        alertdialog.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
 
     }
 
