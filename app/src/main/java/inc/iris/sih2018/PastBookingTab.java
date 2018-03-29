@@ -16,13 +16,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import inc.iris.sih2018.logic.Booking;
 import inc.iris.sih2018.logic.BookingStatus;
-import inc.iris.sih2018.logic.ParkingSlot;
 import inc.iris.sih2018.logic.Parse;
 import inc.iris.sih2018.logic.VolleySingleton;
 
@@ -48,14 +46,13 @@ public class PastBookingTab extends Fragment {
         View view= inflater.inflate(R.layout.fragment_booking_tab, container, false);
         recyclerView=view.findViewById(R.id.recycler_booking);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new BookingAdapter(records,getActivity()));
         //
-        requestDate("jaya4svm@gmail.com");
+        requestData("jaya4svm@gmail.com");
 
         return view;
     }
 
-    private void requestDate(final String user)
+    private void requestData(final String user)
     {
         StringRequest request=new StringRequest(Request.Method.GET, "url", new Response.Listener<String>() {
             @Override

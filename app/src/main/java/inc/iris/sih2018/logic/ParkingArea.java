@@ -1,5 +1,7 @@
 package inc.iris.sih2018.logic;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by Sud on 3/16/18.
  */
@@ -8,22 +10,25 @@ public class ParkingArea {
     /**
      * rate= parking rate
      */
-    private String areaId, name, gps;
+    private String areaId, name;
+    private double lat,lng;
     private int capacity, available,rate;
     private final int DEFAULT_RATE=10;
 
-    public ParkingArea(String areaId, String name, String gps, int capacity) {
+    public ParkingArea(String areaId, String name, double lat, double lng, int capacity) {
         this.areaId = areaId;
         this.name = name;
-        this.gps = gps;
+        this.lat = lat;
+        this.lng=lng;
         this.capacity = capacity;
         this.rate=DEFAULT_RATE;
     }
 
-    public ParkingArea(String areaId, String name, String gps, int capacity, int rate) {
+    public ParkingArea(String areaId, String name, double lat, double lng, int capacity, int rate) {
         this.areaId = areaId;
         this.name = name;
-        this.gps = gps;
+        this.lat = lat;
+        this.lng=lng;
         this.capacity = capacity;
         this.rate = rate;
     }
@@ -56,8 +61,8 @@ public class ParkingArea {
         return areaId;
     }
 
-    public String getGps() {
-        return gps;
+    public LatLng getLatLng() {
+        return new LatLng(lat,lng);
     }
 
     public int getRate() {

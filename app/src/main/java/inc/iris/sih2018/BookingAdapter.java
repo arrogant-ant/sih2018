@@ -39,7 +39,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         Booking booking=records[position];
         ParkingSlot slot=booking.getSlot();
         holder.name.setText(slot.getName());
-        holder.address.setText(slot.getAddress());
+        //todo remove address
         holder.cost.setText(String.valueOf(booking.getBookingCost()));
         holder.timeSlot.setText(booking.getTimeSlot());
         if(booking.getStatus()==BookingStatus.PARKED)

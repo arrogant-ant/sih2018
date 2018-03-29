@@ -5,16 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class nearby_parking_adapter extends  RecyclerView.Adapter<nearby_parking_adapter.MyViewHolder> {
+public class nearby_parking_adapter extends RecyclerView.Adapter<nearby_parking_adapter.MyViewHolder> {
     List<nearby_parking_bean> beanList;
-    private ClickListener clickListener;
+
     Context context;
 
     public nearby_parking_adapter(List<nearby_parking_bean> gList, Context c) {
@@ -22,9 +24,6 @@ public class nearby_parking_adapter extends  RecyclerView.Adapter<nearby_parking
         this.context = c;
     }
 
-    public void setClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,11 +33,16 @@ public class nearby_parking_adapter extends  RecyclerView.Adapter<nearby_parking
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        nearby_parking_bean gallary = beanList.get(position);
+        final nearby_parking_bean gallary = beanList.get(position);
         holder.name.setText(gallary.getName());
         holder.distance.setText(gallary.getDistance());
         holder.slots.setText(gallary.getSlots());
-//        holder.cost.setText(gallary.getCost());
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "clicked " + gallary.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -46,15 +50,14 @@ public class nearby_parking_adapter extends  RecyclerView.Adapter<nearby_parking
         return beanList.size();
     }
 
-    public interface ClickListener {
-        void itemClicked(View v, int position);
-    }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
         TextView name;
         TextView distance;
         TextView slots;
+        FrameLayout parentLayout;
         //  TextView cost;
 
         MyViewHolder(View itemView) {
@@ -64,9 +67,10 @@ public class nearby_parking_adapter extends  RecyclerView.Adapter<nearby_parking
             slots = (TextView) itemView.findViewById(R.id.slots);
             //  cost = (TextView) itemView.findViewById(R.id.costss);
             imageView = (ImageView) itemView.findViewById(R.id.parking_img);
+            parentLayout = itemView.findViewById(R.id.parentLayout);
         }
 
-        @Override
+        /*@Override
         public void onClick(View v) {
             if (clickListener != null) {
                 clickListener.itemClicked(v, getPosition());
@@ -74,8 +78,7 @@ public class nearby_parking_adapter extends  RecyclerView.Adapter<nearby_parking
             else
             {
                 Toast.makeText(context, "not clicked", Toast.LENGTH_SHORT).show();
-            }
-        }
-
+            }*/
     }
+
 }
