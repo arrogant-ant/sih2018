@@ -2,7 +2,9 @@ package inc.iris.sih2018;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.Manifest;
@@ -135,12 +137,14 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
      * Represents a geographical location.
      */
     private Location mCurrentLocation;
-
+    static SharedPreferences sharedPreferences;
+    static SharedPreferences.Editor editor;
     //UI
     private Toolbar toolbar;
     private MarkerOptions markerOptions;
     private Marker searchMarker ;
     private AutoCompleteTextView search_et;
+    int login_value;
 
     // Labels.
     private String mLatitudeLabel;
@@ -176,6 +180,8 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
+        sharedPreferences = getApplicationContext().getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         //set ui
         initUI();
@@ -283,8 +289,15 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        if(Login.user==null) {
+         // 0 - for private mode
+
+
+
+
+        login_value=sharedPreferences.getInt("login_value",0);
+        if(login_value==0) {
             inflater.inflate(R.menu.option_menu, menu);
+
         }
         else
             inflater.inflate(R.menu.signout_menu,menu);
@@ -299,7 +312,24 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
                 startActivity(new Intent(MapActivity.this,Login.class));
                 return true;
             case R.id.signout_menu:
-                startActivity(new Intent(MapActivity.this,Login.class));
+                final AlertDialog.Builder alertdialog=new AlertDialog.Builder(this);
+                alertdialog.setTitle("Logout");
+                alertdialog.setMessage("Click Yes To Logout");
+                alertdialog.setPositiveButton("LOGOUT", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(MapActivity.this,MapActivity.class));
+                        inc.iris.sih2018.MapActivity.editor.putString("user",null);
+                        inc.iris.sih2018.MapActivity.editor.commit();
+                        finish();
+                    }
+                });
+                alertdialog.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                      dialog.dismiss();
+                    }
+                });
                 return true;
             case R.id.bookings_menu:
                 startActivity(new Intent(this,Bookings.class));
