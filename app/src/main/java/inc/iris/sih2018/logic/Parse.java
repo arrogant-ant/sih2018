@@ -23,9 +23,10 @@ public class Parse {
                         object.getLong("arrival"), //arrival
                         object.getLong("departure"), //
                         new ParkingSlot(
-                                object.getString("slotID"),
+                                object.getString("areaID"),
                                 object.getString("name"),
-                                object.getString("gps"),
+                                object.getDouble("lat"),
+                                object.getDouble("lng"),
                                 object.getInt("capacity"),
                                 object.getInt("slotID")
                         ),

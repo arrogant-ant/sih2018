@@ -58,4 +58,8 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    public void openLogin(View view) {
+        startActivity(new Intent(this,Login.class));
+
+    }
 }

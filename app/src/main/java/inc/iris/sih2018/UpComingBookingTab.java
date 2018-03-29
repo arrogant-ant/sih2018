@@ -47,7 +47,6 @@ public class UpComingBookingTab extends Fragment {
         View view= inflater.inflate(R.layout.fragment_booking_tab, container, false);
         recyclerView=view.findViewById(R.id.recycler_booking);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new BookingAdapter(records,getActivity()));
         //
         requestDate("jaya4svm@gmail.com");
 
