@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,6 +29,13 @@ public class nearby_parking extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nearby_parking);
+        Intent intent=new Intent();
+        intent=getIntent();
+        Double latitude_user=intent.getDoubleExtra("latitude",0);
+        Double longitude_user=intent.getDoubleExtra("longitude",0);
+        Log.d("swechchha", String.valueOf(latitude_user));
+        Log.d("swechchha", String.valueOf(longitude_user));
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_booking);
         toolbar = findViewById(R.id.toolbar);
