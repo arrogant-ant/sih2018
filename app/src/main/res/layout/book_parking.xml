@@ -93,11 +93,20 @@
         android:id="@+id/book"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/charges"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="34dp"
-        android:layout_marginEnd="18dp"
+        android:layout_alignStart="@+id/booking_cost"
+        android:layout_below="@+id/booking_cost"
+        android:layout_marginTop="64dp"
         android:text="BOOK" />
+
+    <Button
+        android:id="@+id/calculate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_time_out"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="24dp"
+        android:layout_toStartOf="@+id/booking_cost"
+        android:text="GET ESTIMATED COST" />
 
 
 </RelativeLayout>

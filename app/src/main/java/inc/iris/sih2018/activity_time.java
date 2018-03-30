@@ -44,7 +44,7 @@ public class activity_time extends AppCompatActivity implements
     Button btnDatePicker, btnTimePicker,btnDatePicker1, btnTimePicker1;
     EditText txtDate, txtTime,txtDate1,txtTime1;
     TextView charges;
-    Button book;
+    Button book,calculate;
     private int mYear, mMonth, mDay, mHour, mMinute;
     RequestQueue queue;
     Long arrived,departed;
@@ -58,10 +58,12 @@ public class activity_time extends AppCompatActivity implements
         queue= Volley.newRequestQueue(this);
         Intent intent=getIntent();
         final String park_area=intent.getStringExtra("park_area");
+        final int cost=intent.getIntExtra("cost",0);
         btnDatePicker=(Button)findViewById(R.id.btn_date);
         btnTimePicker=(Button)findViewById(R.id.btn_time);
         btnDatePicker1=(Button)findViewById(R.id.btn_date_out);
         btnTimePicker1=(Button)findViewById(R.id.btn_time_out);
+        calculate=findViewById(R.id.calculate);
         txtDate=(EditText)findViewById(R.id.in_date);
         txtTime=(EditText)findViewById(R.id.in_time);
         txtDate1=(EditText)findViewById(R.id.out_date);
@@ -72,6 +74,12 @@ public class activity_time extends AppCompatActivity implements
         btnTimePicker.setOnClickListener(this);
         btnDatePicker1.setOnClickListener(this);
         btnTimePicker1.setOnClickListener(this);
+        calculate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               charges.setText(Booking.getBookingCost(arrived,departed,cost));
+            }
+        });
 
         book.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +108,7 @@ public class activity_time extends AppCompatActivity implements
                         params.put("entry", String.valueOf(arrived));
                           params.put("exit", String.valueOf(departed));
                         params.put("username","user1");
-                        params.put("price", String.valueOf(Booking.getBookingCost(arrived,departed,20)));
+                        params.put("price", String.valueOf(Booking.getBookingCost(arrived,departed,cost)));
 
                         return params;
                     }
