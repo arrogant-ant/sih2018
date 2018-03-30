@@ -12,7 +12,7 @@ import java.util.Calendar;
 
 
 public class Parse {
-    public static Booking[] getBooking(String response, BookingStatus status) {
+    public static Booking[] getBooking(String response) {
 
         int i;
         try {
@@ -28,18 +28,20 @@ public class Parse {
                 departure.setTimeInMillis(object.getLong("departure"));
 
                 list[i] = new Booking(
+                        object.getString("bookingID"),
                         arrival, //arrival
                         departure, //
                         new ParkingSlot(
                                 object.getString("name"),
                                 object.getString("location"),
-                                object.getDouble("lat"),
-                                object.getDouble("lng"),
-                                object.getInt("capacity"),
+                                0.0,0.0,
+                                object.getInt("capacity"),//available
                                 object.getInt("slotID")
                         ),
                         object.getString("vehicleID"),
-                        status);
+                        object.getString("type"),
+                        object.getString("status"),
+                        object.getInt("price"));
             }
             return list;
         } catch (JSONException e) {
