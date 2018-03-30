@@ -77,7 +77,7 @@ import inc.iris.sih2018.logic.PlaceAutocompleteAdapter;
 import inc.iris.sih2018.logic.User;
 
 
-public class MapActivity extends AppCompatActivity implements  OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MapActivity.class.getSimpleName();
 
@@ -143,25 +143,24 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     //UI
     private Toolbar toolbar;
     private MarkerOptions markerOptions;
-    private Marker searchMarker ;
+    private Marker searchMarker;
     private AutoCompleteTextView search_et;
 
     // Labels.
 
     private static final float DEFAULT_ZOOM = 12f;
-    Marker marker_object,parking1,parking2,parking3,parking4;
+    Marker marker_object, parking1, parking2, parking3, parking4;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     protected GeoDataClient mGeoDataClient;
     private GoogleApiClient mGoogleApiClient;
     private static final LatLngBounds BOUNDS_INDIA = new LatLngBounds(new LatLng(23.63936, 68.14712), new LatLng(28.20453, 97.34466));
 
 
-
-
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
      * Start Updates and Stop Updates buttons.
-     */View mapview;
+     */
+    View mapview;
     private Boolean mRequestingLocationUpdates;
 
     /**
@@ -174,7 +173,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
-        sharedPreferences = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE );
+        sharedPreferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         //set ui
@@ -202,9 +201,9 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
             startLocationUpdates();
         }
         SupportMapFragment mapfragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapview=mapfragment.getView();
+        mapview = mapfragment.getView();
         mapfragment.getMapAsync(MapActivity.this);
-        Log.d(TAG,"init keyboard");
+        Log.d(TAG, "init keyboard");
 
 
     }
@@ -213,12 +212,12 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
      * Toolbar and UI stuff
      */
     private void initUI() {
-        toolbar=findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Construct a GeoDataClient.
         mGeoDataClient = Places.getGeoDataClient(this, null);
-        placeAutocompleteAdapter=new PlaceAutocompleteAdapter(MapActivity.this,mGeoDataClient,BOUNDS_INDIA,null);
-        search_et=findViewById(R.id.input_search);
+        placeAutocompleteAdapter = new PlaceAutocompleteAdapter(MapActivity.this, mGeoDataClient, BOUNDS_INDIA, null);
+        search_et = findViewById(R.id.input_search);
         search_et.setAdapter(placeAutocompleteAdapter);
         search_et.setOnItemClickListener(mAutoCompleteListener);
 
@@ -236,35 +235,34 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
      * onClick of search image view
      * @param view
      */
-     public void geoLocate(View view) {
-         Log.d(TAG, "geoLocate: onClick");
-        String searchString=search_et.getText().toString();
-        Geocoder geocoder=new Geocoder(this);
-        List<Address> list=new ArrayList<>();
+    public void geoLocate(View view) {
+        Log.d(TAG, "geoLocate: onClick");
+        String searchString = search_et.getText().toString();
+        Geocoder geocoder = new Geocoder(this);
+        List<Address> list = new ArrayList<>();
         try {
-            list=geocoder.getFromLocationName(searchString,1);
+            list = geocoder.getFromLocationName(searchString, 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if(list.size()>0)
-        {
-            Address address=list.get(0);
-            LatLng latLng=new LatLng(address.getLatitude(),address.getLongitude());
-            String title=address.getAddressLine(0);
-            placeSearchMarker(latLng,title,DEFAULT_ZOOM);
+        if (list.size() > 0) {
+            Address address = list.get(0);
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            String title = address.getAddressLine(0);
+            placeSearchMarker(latLng, title, DEFAULT_ZOOM);
 
         }
 
     }
-    private void placeSearchMarker(LatLng latLng,String title,float zoom)
-    {
-        if(searchMarker!=null)
+
+    private void placeSearchMarker(LatLng latLng, String title, float zoom) {
+        if (searchMarker != null)
             searchMarker.remove();
-        searchMarker=googleMap_global.addMarker(new MarkerOptions()
+        searchMarker = googleMap_global.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title(title));
-        moveCamera(latLng,DEFAULT_ZOOM);
+        moveCamera(latLng, DEFAULT_ZOOM);
     }
 
     /**
@@ -280,12 +278,11 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        if(Login.user==null) {
+        if (Login.user == null) {
             inflater.inflate(R.menu.option_menu, menu);
 
-        }
-        else
-            inflater.inflate(R.menu.signout_menu,menu);
+        } else
+            inflater.inflate(R.menu.signout_menu, menu);
         return true;
     }
 
@@ -294,13 +291,13 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.login_menu:
-                startActivity(new Intent(MapActivity.this,Login.class));
+                startActivity(new Intent(MapActivity.this, Login.class));
                 return true;
             case R.id.signout_menu:
                 new User(this).signOut();
                 return true;
             case R.id.bookings_menu:
-                startActivity(new Intent(this,Bookings.class));
+                startActivity(new Intent(this, Bookings.class));
                 return true;
             case R.id.help:
                 Toast.makeText(this, "help", Toast.LENGTH_SHORT).show();
@@ -387,23 +384,22 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
         };
     }
 
-    private void placeMarker(Location location)
-    {
+    private void placeMarker(Location location) {
 
-        double lat=location.getLatitude();
-        double lng=location.getLongitude();
-        LatLng latLng=new LatLng(lat,lng);
-        Log.d("marker",""+lat);
-        if(marker_object!=null)
-        {
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+        LatLng latLng = new LatLng(lat, lng);
+        Log.d("marker", "" + lat);
+        if (marker_object != null) {
             marker_object.remove();
 
         }
-         marker_object= googleMap_global.addMarker(new MarkerOptions()
-                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.car))
-                 .position(latLng)
-                 .title("MY Location"));
+        marker_object = googleMap_global.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.car))
+                .position(latLng)
+                .title("MY Location"));
     }
+
     /**
      * Uses a {@link com.google.android.gms.location.LocationSettingsRequest.Builder} to build
      * a {@link com.google.android.gms.location.LocationSettingsRequest} that is used for checking
@@ -457,6 +453,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
         stopLocationUpdates();
     }
 */
+
     /**
      * Requests location updates from the FusedLocationApi. Note: we don't call this unless location
      * runtime permission has been granted.
@@ -690,7 +687,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-            googleMap_global=googleMap;
+        googleMap_global = googleMap;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -729,33 +726,28 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
                     }
                 });
 
-         UiSettings uiSettings=googleMap_global.getUiSettings();
-         uiSettings.setAllGesturesEnabled(true);
+        UiSettings uiSettings = googleMap_global.getUiSettings();
+        uiSettings.setAllGesturesEnabled(true);
 
         uiSettings.setCompassEnabled(true);
-          googleMap_global.setMyLocationEnabled(true);
+        googleMap_global.setMyLocationEnabled(true);
 
 
+        LatLng park1 = new LatLng(23.711986, 76.504629);
+        LatLng park2 = new LatLng(24.711986, 36.504629);
+        LatLng park3 = new LatLng(28.711986, 86.504629);
+        LatLng park4 = new LatLng(65.711986, 56.504629);
 
 
-        LatLng park1=new LatLng(23.711986 , 76.504629);
-        LatLng park2=new LatLng(24.711986 , 36.504629);
-        LatLng park3=new LatLng(28.711986 , 86.504629);
-        LatLng park4=new LatLng(65.711986 , 56.504629);
-
-
-
-        parking1=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park1).title("parking 1"));
-        parking2=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park2).title("parking 2"));
-        parking3=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park3).title("parking 3"));
-        parking4=googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park4).title("parking 4"));
+        parking1 = googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park1).title("parking 1"));
+        parking2 = googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park2).title("parking 2"));
+        parking3 = googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park3).title("parking 3"));
+        parking4 = googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park4).title("parking 4"));
         googleMap_global.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker)
-            {
-                if(marker.equals(parking1))
-                {
-                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(MapActivity.this);
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.equals(parking1)) {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(MapActivity.this);
                     alertDialog.setMessage("Book Your Parking IN Parking Area 1")
                             .setTitle("Booking");
                     alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
@@ -782,9 +774,8 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
 
 
                 }
-                if(marker.equals(parking2))
-                {
-                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(MapActivity.this);
+                if (marker.equals(parking2)) {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(MapActivity.this);
                     alertDialog.setMessage("Book Your Parking IN Parking Area 2")
                             .setTitle("Booking");
                     alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
@@ -801,9 +792,8 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
                     });
                     alertDialog.show();
                 }
-                if(marker.equals(parking3))
-                {
-                    final AlertDialog.Builder alertDialog=new AlertDialog.Builder(MapActivity.this);
+                if (marker.equals(parking3)) {
+                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MapActivity.this);
                     alertDialog.setMessage("Book Your Parking IN Parking Area 3")
                             .setTitle("Booking");
                     alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
@@ -821,9 +811,8 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
                     alertDialog.show();
 
                 }
-                if(marker.equals(parking4))
-                {
-                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(MapActivity.this);
+                if (marker.equals(parking4)) {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(MapActivity.this);
                     alertDialog.setMessage("Book Your Parking IN Parking Area 4")
                             .setTitle("Booking");
                     alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
@@ -842,7 +831,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
 
                 }
 
-               return true;
+                return true;
             }
         });
 
@@ -851,8 +840,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     /*
     ------------google places api---------
      */
-    private void hideSoftKeyboard()
-    {
+    private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -860,19 +848,18 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             hideSoftKeyboard();
-            final String placeId=placeAutocompleteAdapter.getItem(i).getPlaceId();
-            PendingResult<PlaceBuffer>  placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient,placeId);
+            final String placeId = placeAutocompleteAdapter.getItem(i).getPlaceId();
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
             placeResult.setResultCallback(mUpdatePlaceCallback);
         }
     };
-    private ResultCallback<PlaceBuffer> mUpdatePlaceCallback=new ResultCallback<PlaceBuffer>() {
+    private ResultCallback<PlaceBuffer> mUpdatePlaceCallback = new ResultCallback<PlaceBuffer>() {
         @Override
         public void onResult(@NonNull PlaceBuffer places) {
-            if(places.getStatus().isSuccess())
-            {
-                Place place=places.get(0);
-                placeSearchMarker(place.getLatLng(),place.getName().toString(),DEFAULT_ZOOM);
+            if (places.getStatus().isSuccess()) {
+                Place place = places.get(0);
+                placeSearchMarker(place.getLatLng(), place.getName().toString(), DEFAULT_ZOOM);
 
             }
 
@@ -886,9 +873,35 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
     }
 
     public void getNearBy(View view) {
-        Intent i=new Intent(this,nearby_parking.class);
-        i.putExtra("latitude",mCurrentLocation.getLatitude());
-        i.putExtra("longitude",mCurrentLocation.getLongitude());
-        startActivity(i);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        mFusedLocationClient.getLastLocation()
+                .addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            Location mLastLocation = task.getResult();
+                            Intent i=new Intent(MapActivity.this,nearby_parking.class);
+                            i.putExtra("latitude",mLastLocation.getLatitude());
+                            i.putExtra("longitude",mLastLocation.getLongitude());
+                            startActivity(i);
+
+
+                        } else {
+                            Log.w(TAG, "getLastLocation:exception", task.getException());
+                            Toast.makeText(MapActivity.this, "Unable to find the location.\nPease enage your gps", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
     }
 }
