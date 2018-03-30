@@ -38,6 +38,7 @@ public class nearby_parking_adapter extends RecyclerView.Adapter<nearby_parking_
         holder.name.setText(gallary.getName());
         holder.distance.setText(gallary.getDistance());
         holder.slots.setText(gallary.getSlots());
+        holder.price.setText(gallary.getCost());
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +62,7 @@ public class nearby_parking_adapter extends RecyclerView.Adapter<nearby_parking_
         TextView name;
         TextView distance;
         TextView slots;
+        TextView price;
         FrameLayout parentLayout;
 
         MyViewHolder(View itemView) {
@@ -68,6 +70,7 @@ public class nearby_parking_adapter extends RecyclerView.Adapter<nearby_parking_
             name = (TextView) itemView.findViewById(R.id.parking_name);
             distance = (TextView) itemView.findViewById(R.id.distance);
             slots = (TextView) itemView.findViewById(R.id.slots);
+            price=itemView.findViewById(R.id.price);
             imageView = (ImageView) itemView.findViewById(R.id.parking_img);
             parentLayout = itemView.findViewById(R.id.parentLayout);
         }

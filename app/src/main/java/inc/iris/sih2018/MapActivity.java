@@ -885,7 +885,8 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
 
     }
 
-    public void getNearBy(View view) {
+    public void getNearBy(View view)
+    {
         startActivity(new Intent(this,nearby_parking.class));
     }
 }

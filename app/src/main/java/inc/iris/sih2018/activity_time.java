@@ -28,12 +28,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import inc.iris.sih2018.logic.Booking;
 
 public class activity_time extends AppCompatActivity implements
         View.OnClickListener {
@@ -44,7 +47,7 @@ public class activity_time extends AppCompatActivity implements
     Button book;
     private int mYear, mMonth, mDay, mHour, mMinute;
     RequestQueue queue;
-    String arrived,departed;
+    Long arrived,departed;
     Context context=this;
 
 
@@ -57,8 +60,8 @@ public class activity_time extends AppCompatActivity implements
         final String park_area=intent.getStringExtra("park_area");
         btnDatePicker=(Button)findViewById(R.id.btn_date);
         btnTimePicker=(Button)findViewById(R.id.btn_time);
-        btnDatePicker1=(Button)findViewById(R.id.btn_date);
-        btnTimePicker1=(Button)findViewById(R.id.btn_time);
+        btnDatePicker1=(Button)findViewById(R.id.btn_date_out);
+        btnTimePicker1=(Button)findViewById(R.id.btn_time_out);
         txtDate=(EditText)findViewById(R.id.in_date);
         txtTime=(EditText)findViewById(R.id.in_time);
         txtDate1=(EditText)findViewById(R.id.out_date);
@@ -67,6 +70,9 @@ public class activity_time extends AppCompatActivity implements
         book=findViewById(R.id.book);
         btnDatePicker.setOnClickListener(this);
         btnTimePicker.setOnClickListener(this);
+        btnDatePicker1.setOnClickListener(this);
+        btnTimePicker1.setOnClickListener(this);
+
         book.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -90,10 +96,11 @@ public class activity_time extends AppCompatActivity implements
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String,String> params=new HashMap<String, String>();
-                       params.put("parkingname",park_area);
-                        params.put("entrytime",arrived);
-                          params.put("exittime",departed);
-                        params.put("username",Login.user);
+                       params.put("parkingname","bit");
+                        params.put("entry", String.valueOf(arrived));
+                          params.put("exit", String.valueOf(departed));
+                        params.put("username","user1");
+                        params.put("price", String.valueOf(Booking.getBookingCost(arrived,departed,20)));
 
                         return params;
                     }
@@ -201,8 +208,8 @@ public class activity_time extends AppCompatActivity implements
             departure.set(Calendar.MINUTE,mMinute);
             timePickerDialog.show();
         }
-        arrived= String.valueOf(arrival.getTimeInMillis());
-        departed= String.valueOf(arrival.getTimeInMillis());
+        arrived= arrival.getTimeInMillis();
+        departed=arrival.getTimeInMillis();
     }
 }
 
