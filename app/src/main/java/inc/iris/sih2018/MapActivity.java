@@ -888,6 +888,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .addOnCompleteListener(this, new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
+
                         if (task.isSuccessful() && task.getResult() != null) {
                             Location mLastLocation = task.getResult();
                             Intent i=new Intent(MapActivity.this,nearby_parking.class);
