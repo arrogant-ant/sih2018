@@ -100,7 +100,7 @@ public class PastBookingTab extends Fragment {
                 new ParkingSlot("Nagpur","Station",22.0,22.0,100,12),
                 "MH010A1234",BookingStatus.CONFIRMED);
         recyclerView.setAdapter((new BookingAdapter(new Booking[]{booking},getActivity())));*/
-        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity()));
+        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity(),TAG));
 
     }
 }

@@ -91,7 +91,7 @@ public class CurrentBookingTab extends Fragment {
 
 
     private void parseResponse(String response) {
-        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity()));
+        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity(),TAG));
 
     }
 

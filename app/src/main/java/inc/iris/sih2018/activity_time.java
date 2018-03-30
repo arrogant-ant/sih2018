@@ -4,13 +4,16 @@ package inc.iris.sih2018;
  * Created by Vinay on 3/27/2018.
  */
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -31,6 +34,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import dmax.dialog.SpotsDialog;
 import inc.iris.sih2018.logic.Booking;
 import inc.iris.sih2018.logic.User;
 
@@ -57,6 +61,7 @@ public class activity_time extends AppCompatActivity implements
         Intent intent=getIntent();
         final String park_area=intent.getStringExtra("park_Area");
         final int cost=intent.getIntExtra("cost",0);
+        final int available_slots=intent.getIntExtra("slots",0);
         entryDatePicker =(Button)findViewById(R.id.btn_date);
         entryTimePicker =(Button)findViewById(R.id.btn_time);
         exitDatePicker =(Button)findViewById(R.id.btn_date_out);
@@ -85,44 +90,58 @@ public class activity_time extends AppCompatActivity implements
 
         book.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                StringRequest stringRequest=new StringRequest(Request.Method.POST, "http://sih2018.esy.es/book.php", new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(context, response, Toast.LENGTH_LONG).show();
-
-                        //charges.setText(response);
-
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context,error.getMessage(), Toast.LENGTH_SHORT).show();
-                       // charges.setText(error.getMessage());
-
-                    }
-                }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        arrived= arrival.getTimeInMillis();
-                        departed=departure.getTimeInMillis();
-                        String price= String.valueOf(Booking.getBookingCost(arrived,departed,cost));
-                        Log.d(TAG, "getParams: "+arrived+" "+departed+" "+park_area+" "+User.user);
-                        Map<String,String> params= new HashMap<>();
-                       params.put("parkingname",park_area);
-                        params.put("entry", String.valueOf(arrived));
-                          params.put("exit", String.valueOf(departed));
-                        params.put("username", User.user);
-                        params.put("price",price );
-
-                        return params;
-                    }
-                };
-                queue.add(stringRequest);
+            public void onClick(View v) {
+                if (available_slots == 0) {
+                    final AlertDialog.Builder builder=new AlertDialog.Builder(context);
+                    builder.setTitle("Waiting booking confirmation");
+                    builder.setMessage("Do you want to make a waiting booking?");
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //add string request to waiting php
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
+                } else {
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://sih2018.esy.es/book.php", new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Toast.makeText(context, response, Toast.LENGTH_LONG).show();
 
 
+                            //charges.setText(response);
+
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+                            // charges.setText(error.getMessage());
+
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            arrived = arrival.getTimeInMillis();
+                            departed = departure.getTimeInMillis();
+                            String price = String.valueOf(Booking.getBookingCost(arrived, departed, cost));
+                            Log.d(TAG, "getParams: " + arrived + " " + departed + " " + park_area + " " + User.user);
+                            Map<String, String> params = new HashMap<>();
+                            params.put("parkingname", park_area);
+                            params.put("entry", String.valueOf(arrived));
+                            params.put("exit", String.valueOf(departed));
+                            params.put("username", User.user);
+                            params.put("price", price);
+
+                            return params;
+                        }
+                    };
+                    queue.add(stringRequest);
+
+
+                }
             }
         });
     }

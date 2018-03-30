@@ -32,7 +32,7 @@ import inc.iris.sih2018.logic.VolleySingleton;
 public class UpComingBookingTab extends Fragment {
 
 
-
+    private static final String TAG = "UpcomingBookingTab";
     private RecyclerView recyclerView;
     private String url ="http://www.sih2018.esy.es/user_current.php";
 
@@ -84,7 +84,7 @@ public class UpComingBookingTab extends Fragment {
 
 
     private void parseResponse(String response) {
-        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity()));
+        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity(),TAG));
 
     }
 
