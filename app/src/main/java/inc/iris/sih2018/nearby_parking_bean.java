@@ -7,10 +7,10 @@ package inc.iris.sih2018;
 public class nearby_parking_bean {
     public String name;
     public String distance;
-    public String slots;
+    public int slots;
     public int cost;
 
-     public nearby_parking_bean(String name,String distance,String slots,int cost)
+     public nearby_parking_bean(String name,String distance,int  slots,int cost)
      {
         this.name=name;
         this.distance=distance;
@@ -34,11 +34,11 @@ public class nearby_parking_bean {
     {
         this.distance = distance;
     }
-    public String getSlots()
+    public int getSlots()
     {
         return slots;
     }
-    public void setSlots(String slots)
+    public void setSlots(int slots)
     {
         this.slots = slots;
     }
