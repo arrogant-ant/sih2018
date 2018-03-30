@@ -74,6 +74,7 @@ import java.util.Date;
 import java.util.List;
 
 import inc.iris.sih2018.logic.PlaceAutocompleteAdapter;
+import inc.iris.sih2018.logic.User;
 
 
 public class MapActivity extends AppCompatActivity implements  OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
@@ -296,7 +297,7 @@ public class MapActivity extends AppCompatActivity implements  OnMapReadyCallbac
                 startActivity(new Intent(MapActivity.this,Login.class));
                 return true;
             case R.id.signout_menu:
-                new Login().signOut();
+                new User(this).signOut();
                 return true;
             case R.id.bookings_menu:
                 startActivity(new Intent(this,Bookings.class));

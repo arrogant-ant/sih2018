@@ -72,7 +72,7 @@ public class Login extends AppCompatActivity {
 
         //shared pref
         sharedPreferences = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE );
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor = sharedPreferences.edit();
 
     }
 
@@ -298,28 +298,7 @@ public class Login extends AppCompatActivity {
         dialog.show();
 
     }
-    public void signOut()
-    {
-        final android.app.AlertDialog.Builder alertdialog=new android.app.AlertDialog.Builder(this);
-        alertdialog.setTitle("Logout");
-        alertdialog.setMessage("Click Yes To Logout");
-        alertdialog.setPositiveButton("LOGOUT", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(Login.this,MapActivity.class));
-                editor.putString("user",null);
-                editor.commit();
-                finish();
-            }
-        });
-        alertdialog.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
 
-    }
 
 
 }
