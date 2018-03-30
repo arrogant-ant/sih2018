@@ -1,9 +1,11 @@
 package inc.iris.sih2018.logic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import inc.iris.sih2018.MapActivity;
 
@@ -19,6 +21,8 @@ public class User {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     public static String user=null;
+    private static final String TAG = "User";
+    public static final String PREF_TAG="username";
 
     public User(Context mContext) {
         this.mContext = mContext;
@@ -35,9 +39,13 @@ public class User {
         alertdialog.setPositiveButton("LOGOUT", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mContext.startActivity(new Intent(mContext,MapActivity.class));
-                editor.putString("user",null);
+                editor.putString(PREF_TAG,null);
                 editor.commit();
+                user=null;
+                Log.d(TAG, "onClick: sing out "+sharedPreferences.getString(PREF_TAG,null));
+                mContext.startActivity(new Intent(mContext,MapActivity.class));
+                ((Activity)mContext).finish();
+
 
             }
         });
@@ -47,6 +55,8 @@ public class User {
                 dialog.dismiss();
             }
         });
+        alertdialog.show();
 
     }
+
 }

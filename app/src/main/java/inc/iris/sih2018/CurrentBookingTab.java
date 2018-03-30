@@ -34,6 +34,7 @@ import inc.iris.sih2018.logic.Booking;
 import inc.iris.sih2018.logic.BookingStatus;
 import inc.iris.sih2018.logic.ParkingSlot;
 import inc.iris.sih2018.logic.Parse;
+import inc.iris.sih2018.logic.User;
 import inc.iris.sih2018.logic.VolleySingleton;
 
 
@@ -45,7 +46,7 @@ public class CurrentBookingTab extends Fragment {
     private static final String TAG = "CurrentBookingTab";
 
     private RecyclerView recyclerView;
-    private String url ="http://sih2018.esy.es/user_current.php";
+    private String url ="http://www.sih2018.esy.es/user_current.php";
     public CurrentBookingTab() {
         // Required empty public constructor
     }
@@ -59,12 +60,12 @@ public class CurrentBookingTab extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_booking);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //
-        requestDate("jaya4svm@gmail.com");
+        requestDate(User.user);
         return view;
     }
     private void requestDate(final String user)
     {
-        StringRequest request=new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 parseResponse(response);

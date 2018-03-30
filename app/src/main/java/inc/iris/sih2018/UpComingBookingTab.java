@@ -25,6 +25,7 @@ import inc.iris.sih2018.logic.Booking;
 import inc.iris.sih2018.logic.BookingStatus;
 import inc.iris.sih2018.logic.ParkingSlot;
 import inc.iris.sih2018.logic.Parse;
+import inc.iris.sih2018.logic.User;
 import inc.iris.sih2018.logic.VolleySingleton;
 
 
@@ -33,7 +34,7 @@ public class UpComingBookingTab extends Fragment {
 
 
     private RecyclerView recyclerView;
-    private Booking[] records;
+    private String url ="http://www.sih2018.esy.es/user_current.php";
 
     public UpComingBookingTab() {
         // Required empty public constructor
@@ -48,13 +49,13 @@ public class UpComingBookingTab extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_booking);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //
-        requestDate("jaya4svm@gmail.com");
+        requestDate(User.user);
 
         return view;
     }
     private void requestDate(final String user)
     {
-        StringRequest request=new StringRequest(Request.Method.GET, "url", new Response.Listener<String>() {
+        StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 parseResponse(response);
@@ -71,7 +72,10 @@ public class UpComingBookingTab extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param=new HashMap<>();
                 param.put("user",user);
+
                 return param;
+
+
             }
         };
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(request);

@@ -278,7 +278,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        if (Login.user == null) {
+        if (User.user == null) {
             inflater.inflate(R.menu.option_menu, menu);
 
         } else

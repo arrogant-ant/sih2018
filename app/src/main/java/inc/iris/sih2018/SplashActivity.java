@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import inc.iris.sih2018.logic.User;
+
 public class SplashActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
@@ -23,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         sharedPreferences = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE );
-        Login.user=sharedPreferences.getString(Login.PREF_TAG,null);
+        User.user=sharedPreferences.getString(User.PREF_TAG,null);
 
         new Handler().postDelayed(new Runnable(){
             @Override

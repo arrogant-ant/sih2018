@@ -1,5 +1,7 @@
 package inc.iris.sih2018.logic;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -20,12 +22,12 @@ public class Booking {
     private int bookingDuration;
 
 
-
     private int bookingCost;
     private ParkingSlot slot;
     private static final int TIME_UNIT = 1000 * 60 * 60;//FOR ONE HOUR
     private String vehicleID; //can be vehicle no;
     private BookingStatus status;
+    private static final String TAG = "Booking";
 
 
     public Booking(Calendar schArrival, Calendar schDeparture, ParkingSlot slot, String vehicleID, BookingStatus status) {
@@ -58,8 +60,8 @@ public class Booking {
     public String getTimeSlot() {
         String arrival, departure;
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aaa");
-        arrival = timeFormat.format(getSchArrival());
-        departure = timeFormat.format(getSchDeparture());
+        arrival = timeFormat.format(getSchArrival().getTimeInMillis());
+        departure = timeFormat.format(getSchDeparture().getTimeInMillis());
         return arrival + " - " + departure;
     }
 
@@ -81,7 +83,8 @@ public class Booking {
     }
 //static method to get estimated boking cost
     public static int getBookingCost(long arrivalTime, long departureTime, int cost) {
-        int time = (int) (departureTime - arrivalTime) / TIME_UNIT;
+        int time = (int) Math.ceil((double) (departureTime - arrivalTime) / TIME_UNIT);
+        Log.d(TAG, "getBookingCost: "+cost+" time "+time+" ar "+arrivalTime+" dep "+departureTime);
         return time * cost;
     }
 

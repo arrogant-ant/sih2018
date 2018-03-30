@@ -31,8 +31,8 @@ public class Parse {
                         arrival, //arrival
                         departure, //
                         new ParkingSlot(
-                                object.getString("areaID"),
                                 object.getString("name"),
+                                object.getString("location"),
                                 object.getDouble("lat"),
                                 object.getDouble("lng"),
                                 object.getInt("capacity"),
@@ -45,8 +45,12 @@ public class Parse {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+      /*  Booking booking=new Booking(Calendar.getInstance(),Calendar.getInstance(),
+                new ParkingSlot("Nagpur","Station",22.0,22.0,100,12),
+                "MH010A1234",BookingStatus.CONFIRMED);*/
 
-        return null;
+        Booking[] list=new Booking[0];
+        return list;
 
     }
 

@@ -37,8 +37,8 @@ public class nearby_parking_adapter extends RecyclerView.Adapter<nearby_parking_
         final nearby_parking_bean gallary = beanList.get(position);
         holder.name.setText(gallary.getName());
         holder.distance.setText(gallary.getDistance());
-        holder.slots.setText(gallary.getSlots());
-        holder.price.setText(gallary.getCost());
+        holder.slots.setText(String.valueOf(gallary.getSlots()));
+        holder.price.setText(String.valueOf(gallary.getCost()));
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

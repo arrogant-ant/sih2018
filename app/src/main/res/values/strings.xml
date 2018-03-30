@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SIH2018</string>
+    <string name="app_name">ParkMe</string>
     <string name="google_maps_key">AIzaSyBG7Eoj3M_feR3-uBTDgtaTX7TkG42DJP0</string>
     <string name="permission_rationale">Location permissions are needed for core functionality of PARKME!!!</string>
 

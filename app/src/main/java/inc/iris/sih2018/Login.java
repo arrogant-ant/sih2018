@@ -27,20 +27,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
+import inc.iris.sih2018.logic.User;
 import inc.iris.sih2018.logic.VolleySingleton;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Login extends AppCompatActivity {
     private static final String TAG ="Login" ;
-    public static final String PREF_TAG="username";
+//    public static final String PREF_TAG="username";
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Button btn_signin, btn_register;
     RelativeLayout relativelayout;
     private final String loginURL = "http://www.sih2018.esy.es/login.php";
     private final String regURL = "http://www.sih2018.esy.es/register.php";
-    public static String user=null;
+//    public static String user=null;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -73,7 +74,6 @@ public class Login extends AppCompatActivity {
         //shared pref
         sharedPreferences = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE );
         editor = sharedPreferences.edit();
-
     }
 
     private void showSigninDiaog() {
@@ -122,15 +122,15 @@ public class Login extends AppCompatActivity {
                         waitingdialog.cancel();
                         response=response.trim();
                         Log.d(TAG, "onResponse: "+response);
-
                         switch (response) {
                             //valid Login
                             case "success":
 
-                               editor.putString(PREF_TAG,username);
-                               editor.commit();
-                                Login.user=username;
+                                editor.putString(User.PREF_TAG,username);
+                                editor.commit();
+                                User.user=username;
                                 startActivity(new Intent(Login.this,MapActivity.class));
+                                finish();
                                 break;
                             //invalid login
                             case "failure":
@@ -234,6 +234,7 @@ public class Login extends AppCompatActivity {
                     return;
 
                 }
+
                 final android.app.AlertDialog waitingdialog = new SpotsDialog(Login.this);
                 waitingdialog.show();
                 StringRequest request = new StringRequest(Request.Method.POST, regURL, new Response.Listener<String>() {
@@ -247,8 +248,10 @@ public class Login extends AppCompatActivity {
                             //valid Login
                             case "success":
 
-                                Login.user=username;
+                                User.user=username;
+                                editor.putString(User.PREF_TAG,username);
                                 startActivity(new Intent(Login.this,MapActivity.class));
+                                finish();
                                 break;
                             //invalid login
                             case "failure":

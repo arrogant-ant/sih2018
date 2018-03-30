@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +45,12 @@ public class nearby_parking extends AppCompatActivity {
     JSONObject details;
     String park_name;
     int avail_slots,cost;
-    double latitude,longitude,distance,latitude_user,longitude_user;
+    double latitude;
+    double longitude;
+    String distance;
+    double latitude_user;
+    double longitude_user;
+    private static final String TAG = "nearby_parking";
 
 
     @Override
@@ -56,19 +62,21 @@ public class nearby_parking extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mParkingAdapter = new nearby_parking_adapter(mParkings, this);
-        Intent intent=new Intent();
+        //mParkingAdapter = new nearby_parking_adapter(mParkings, this);
+        Intent intent;
         intent=getIntent();
         latitude_user=intent.getDoubleExtra("latitude",0);
         longitude_user=intent.getDoubleExtra("longitude",0);
+        Log.d(TAG, "onCreate: lat "+latitude_user+" lng "+longitude_user);
 
         StringRequest stringRequest=new StringRequest(Request.Method.POST, "http://sih2018.esy.es/parking.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d(TAG, "onResponse: "+response);
                 try {
-
                    JSONObject jsonObject=new JSONObject(response);
                     JSONArray jsonArray=jsonObject.getJSONArray("server_response");
+                    DecimalFormat df=new DecimalFormat("#.##");
                    // Log.d("aaa", String.valueOf(jsonArray.length()));
                     for(int i=0;i<jsonArray.length();i++) {
                         details = (JSONObject) jsonArray.get(i);
@@ -76,12 +84,16 @@ public class nearby_parking extends AppCompatActivity {
                         avail_slots = details.getInt("available_slots");
                         latitude = details.getDouble("latitude");
                         longitude = details.getLong("longitude");
-                        distance=details.getDouble("distance");
+
+                        distance=df.format(details.getDouble("distance"));
                         cost=details.getInt("cost");
                         nearby_parking_bean mybean1 = new nearby_parking_bean(park_name,distance+" kms", avail_slots,cost);
                         mParkings.add(mybean1);
 
                     }
+                    mParkingAdapter = new nearby_parking_adapter(mParkings, nearby_parking.this);
+                    recyclerView.setAdapter(mParkingAdapter);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -98,14 +110,13 @@ public class nearby_parking extends AppCompatActivity {
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params=new HashMap<String, String>();
+                Map<String,String> params= new HashMap<>();
                 params.put("latitude", String.valueOf(latitude_user));
                 params.put("longitude", String.valueOf(longitude_user));
                 return params;
             }
         };
         queue.add(stringRequest);
-        recyclerView.setAdapter(mParkingAdapter);
     }
 
 }
