@@ -61,7 +61,7 @@ public class UpComingBookingTab extends Fragment {
             @Override
             public void onResponse(String response) {
                 parseResponse(response);
-                Log.d(TAG, "onResponse: "+response);
+              //  Log.d(TAG, "onResponse: "+response);
                 Toast.makeText(getActivity(), "res "+response, Toast.LENGTH_SHORT).show();
 
             }
@@ -75,7 +75,7 @@ public class UpComingBookingTab extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param=new HashMap<>();
                 param.put("user",user);
-
+                param.put("TYPE","UPCOMING");
                 return param;
 
 

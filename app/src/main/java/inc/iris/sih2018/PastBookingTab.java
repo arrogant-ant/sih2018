@@ -69,7 +69,7 @@ public class PastBookingTab extends Fragment {
 
                 try {
                     JSONObject object=new JSONObject(response);
-                    Log.d(TAG, "onResponse val: "+object.getJSONArray("server_response").get(1));
+                   // Log.d(TAG, "onResponse val: "+object.getJSONArray("server_response").get(1));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -8,25 +8,25 @@ public class ParkingSlot extends ParkingArea {
     /**
      * empty store parking state
      */
-    private int slotID;
+    private String slotID;
     private boolean empty;
 
 
     //gps is , separated lat n lng
     //capacity store available
-    public ParkingSlot(String areaId, String name, double lat, double lng, int capacity, int slotID) {
+    public ParkingSlot(String areaId, String name, double lat, double lng, int capacity, String slotID) {
         super(areaId, name, lat,lng, capacity);
         this.slotID = slotID;
         this.empty = true;
     }
 
-    public ParkingSlot(String areaId, String name,double lat, double lng, int capacity, int rate, int slotID) {
+    public ParkingSlot(String areaId, String name,double lat, double lng, int capacity, int rate, String slotID) {
         super(areaId, name,lat,lng, capacity, rate);
         this.slotID = slotID;
         this.empty=true;
     }
 
-    public int getSlotID() {
+    public String getSlotID() {
         return slotID;
     }
 

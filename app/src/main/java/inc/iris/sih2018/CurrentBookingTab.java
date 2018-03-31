@@ -69,7 +69,7 @@ public class CurrentBookingTab extends Fragment {
             @Override
             public void onResponse(String response) {
                 parseResponse(response);
-                Toast.makeText(getActivity(), "res "+response, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "res "+response, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onResponse: "+response);
 
             }

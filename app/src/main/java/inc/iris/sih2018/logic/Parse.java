@@ -38,7 +38,7 @@ public class Parse {
                                 object.getString("name"),
                                 object.getString("location"),
                                 0.0,0.0,0,//available
-                                object.getInt("slotID")
+                                object.getString("slotID")
                         ),
                         object.getString("vehicleID"),
                         object.getString("type"),
@@ -58,6 +58,7 @@ public class Parse {
         return list;
 
     }
+
 
 
 }
