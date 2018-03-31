@@ -169,7 +169,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // Labels.
 
     private static final float DEFAULT_ZOOM = 12f;
-    Marker marker_object, parking, parking2, parking3, parking4;
+    Marker marker_object,marker1;
+    ArrayList<Marker> markers=new ArrayList<>();
+
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     protected GeoDataClient mGeoDataClient;
     private GoogleApiClient mGoogleApiClient;
@@ -762,11 +764,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                             available_slots = details.getString("available_slots");
                                             cost = details.getString("cost");
                                             LatLng park = new LatLng(latitude, longitude);
-                                            parking = googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park).title("parking" + i));
-                                            googleMap_global.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                             markers.add(googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park).title("parking" + i)));
+                                            marker1=markers.get(i);
+                                             googleMap_global.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                                                 @Override
                                                 public boolean onMarkerClick(Marker marker) {
-                                                    if (marker.equals(parking)) {
+                                                    if (marker.equals(marker1)) {
                                                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MapActivity.this);
                                                         alertDialog.setMessage("Book Your Parking IN Parking Area 1")
                                                                 .setTitle("Booking");
