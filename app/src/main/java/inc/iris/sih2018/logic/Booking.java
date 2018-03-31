@@ -47,6 +47,10 @@ public class Booking {
     public String getBookingID() {
         return bookingID;
     }
+    public String getAreaId()
+    {
+        return slot.getAreaId();
+    }
 
     public String getType() {
         return type;
