@@ -26,10 +26,14 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+
+import inc.iris.sih2018.logic.NearByComparator;
 
 /**
  * Created by lappy on 3/26/2018.
@@ -60,6 +64,7 @@ public class nearby_parking extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_booking);
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("NearBy Parkings");
         setSupportActionBar(toolbar);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //mParkingAdapter = new nearby_parking_adapter(mParkings, this);
@@ -87,10 +92,11 @@ public class nearby_parking extends AppCompatActivity {
 
                         distance=df.format(details.getDouble("distance"));
                         cost=details.getInt("cost");
-                        nearby_parking_bean mybean1 = new nearby_parking_bean(park_name,distance+" kms", avail_slots,cost);
+                        nearby_parking_bean mybean1 = new nearby_parking_bean(park_name,distance, avail_slots,cost);
                         mParkings.add(mybean1);
 
                     }
+                    Collections.sort(mParkings,new NearByComparator());
                     mParkingAdapter = new nearby_parking_adapter(mParkings, nearby_parking.this);
                     recyclerView.setAdapter(mParkingAdapter);
 

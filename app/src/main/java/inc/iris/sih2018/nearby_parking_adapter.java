@@ -36,8 +36,8 @@ public class nearby_parking_adapter extends RecyclerView.Adapter<nearby_parking_
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final nearby_parking_bean gallary = beanList.get(position);
         holder.name.setText(gallary.getName());
-        holder.distance.setText(gallary.getDistance());
-        holder.slots.setText(String.valueOf(gallary.getSlots()));
+        holder.distance.setText(gallary.getDistance()+" away");
+        holder.slots.setText(String.valueOf(gallary.getSlots())+" slots available");
         holder.price.setText(String.valueOf(gallary.getCost()));
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
