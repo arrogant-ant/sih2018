@@ -44,6 +44,10 @@ public class Booking {
         this.type=type;
     }
 
+    public String getBookingID() {
+        return bookingID;
+    }
+
     public String getType() {
         return type;
     }
