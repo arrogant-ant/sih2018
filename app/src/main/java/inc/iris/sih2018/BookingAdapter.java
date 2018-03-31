@@ -1,11 +1,14 @@
 package inc.iris.sih2018;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -79,7 +82,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView parkingImage, option;
         TextView name,address,timeSlot,cost,status;
-        TextView name,address,timeSlot,cost;
         FrameLayout layout;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -90,10 +92,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
             timeSlot=itemView.findViewById(R.id.time_slot);
             cost=itemView.findViewById(R.id.cost);
             status=itemView.findViewById(R.id.status);
-
-
             layout=itemView.findViewById(R.id.booking_layout);
-
         }
     }
 }
