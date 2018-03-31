@@ -96,9 +96,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     JSONObject details;
     double latitude;
     double longitude;
-    String park_name;
-    String cost;
-    String available_slots;
     private static final String TAG = MapActivity.class.getSimpleName();
 
     /**
@@ -169,9 +166,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // Labels.
 
     private static final float DEFAULT_ZOOM = 12f;
-    Marker marker_object,marker1;
-    ArrayList<Marker> markers=new ArrayList<>();
-
+    Marker marker_object, parking, parking2, parking3, parking4;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     protected GeoDataClient mGeoDataClient;
     private GoogleApiClient mGoogleApiClient;
@@ -760,58 +755,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                             details = (JSONObject) jsonArray.get(i);
                                             latitude = details.getDouble("latitude");
                                             longitude = details.getDouble("longitude");
-                                            park_name = details.getString("park_name");
-                                            available_slots = details.getString("available_slots");
-                                            cost = details.getString("cost");
                                             LatLng park = new LatLng(latitude, longitude);
-                                             markers.add(googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park).title("parking" + i)));
-                                            marker1=markers.get(i);
-                                             googleMap_global.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                                                @Override
-                                                public boolean onMarkerClick(Marker marker) {
-                                                    if (marker.equals(marker1)) {
-                                                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MapActivity.this);
-                                                        alertDialog.setMessage("Book Your Parking IN Parking Area 1")
-                                                                .setTitle("Booking");
-                                                        alertDialog.setPositiveButton("BOOK", new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                Uri.Builder builder = new Uri.Builder();
-                                                                builder.scheme("https")
-                                                                        .authority("www.google.com").appendPath("maps").appendPath("dir").appendPath("").appendQueryParameter("api", "1")
-                                                                        .appendQueryParameter("destination", 80.00023 + "," + 13.0783);
-                                                                String url = builder.build().toString();
-                                                                Log.d("Directions", url);
-                                                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                                                i.setData(Uri.parse(url));
-                                                                startActivity(i);
-                                                            }
-                                                        });
-                                                        alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                dialog.cancel();
-                                                            }
-                                                        });
-                                                        alertDialog.show();
-
-
-                                                    }
-
-
-
-
-                                                    return true;
-                                                }
-                                            });
+                                            parking = googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park).title("parking" + i));
 
                                         }
-
 
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
 
 
                                 }
@@ -864,7 +815,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         details = (JSONObject) jsonArray.get(i);
                         latitude = details.getDouble("latitude");
                         longitude = details.getDouble("longitude");
-
                         LatLng park = new LatLng(latitude, longitude);
                         parking = googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park).title("parking" + i));
 
