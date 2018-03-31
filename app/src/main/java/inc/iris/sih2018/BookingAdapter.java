@@ -21,10 +21,12 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
 
    Booking records[];
    Context context;
+   String tag;
 
-    public BookingAdapter(Booking[] records,Context context) {
+    public BookingAdapter(Booking[] records,Context context,String tag) {
         this.records = records;
         this.context=context;
+        this.tag=tag;
     }
 
     @Override
@@ -46,7 +48,25 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
             holder.option.setImageResource(R.mipmap.ic_video);
         else
             holder.option.setImageResource(R.mipmap.ic_navigation);
-
+        if(tag.equals("CurrentBookingTab")) {
+            holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final AlertDialog.Builder builder=new AlertDialog.Builder(context);
+                    builder.setTitle("Cancel Booking");
+                    builder.setMessage("Cancel booking?. You  will be charged 10% of booking cost");
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //add string request to cancel  php
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
+                    return false;
+                }
+            });
+        }
 
 
     }
@@ -59,6 +79,8 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView parkingImage, option;
         TextView name,address,timeSlot,cost,status;
+        TextView name,address,timeSlot,cost;
+        FrameLayout layout;
         public ViewHolder(View itemView) {
             super(itemView);
             parkingImage=itemView.findViewById(R.id.parking_img);
@@ -70,6 +92,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
             status=itemView.findViewById(R.id.status);
 
 
+            layout=itemView.findViewById(R.id.booking_layout);
 
         }
     }

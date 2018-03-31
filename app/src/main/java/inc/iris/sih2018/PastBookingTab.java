@@ -74,6 +74,7 @@ public class PastBookingTab extends Fragment {
                     e.printStackTrace();
                 }
                 parseResponse(response);
+                Log.d(TAG, "onResponse: "+response);
                // Toast.makeText(getActivity(), "res "+response, Toast.LENGTH_SHORT).show();
 
             }

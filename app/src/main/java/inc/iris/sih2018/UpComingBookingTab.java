@@ -75,7 +75,7 @@ public class UpComingBookingTab extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param=new HashMap<>();
                 param.put("user",user);
-                param.put("TYPE","UPCOMING");
+
                 return param;
 
 
