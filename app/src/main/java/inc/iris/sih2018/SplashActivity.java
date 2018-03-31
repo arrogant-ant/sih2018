@@ -33,6 +33,7 @@ public class SplashActivity extends AppCompatActivity {
         sharedPreferences = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE );
         User.user=sharedPreferences.getString(User.PREF_TAG,null);
 
+
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {

@@ -170,6 +170,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private static final float DEFAULT_ZOOM = 12f;
     Marker marker_object,marker1;
+
     ArrayList<Marker> markers=new ArrayList<>();
 
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
