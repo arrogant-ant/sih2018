@@ -185,6 +185,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
      */
     private String mLastUpdateTime;
     private GoogleMap googleMap_global;
+    private double latitude_current;
+    private double longitude_current;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -405,6 +407,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         double lat = location.getLatitude();
         double lng = location.getLongitude();
+        latitude=lat;
+        longitude=lng;
         LatLng latLng = new LatLng(lat, lng);
         Log.d("marker", "" + lat);
         if (marker_object != null) {
@@ -734,7 +738,53 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
                             Location mLastLocation = task.getResult();
-                            moveCamera(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), DEFAULT_ZOOM);
+
+                            latitude_current=mLastLocation.getLatitude();
+                            longitude_current=mLastLocation.getLongitude();
+                            moveCamera(new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude()), DEFAULT_ZOOM);
+                            queue = Volley.newRequestQueue(MapActivity.this);
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://sih2018.esy.es/parking.php", new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    Log.d(TAG, "map response: " + response);
+
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
+                                        JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            details = (JSONObject) jsonArray.get(i);
+                                            latitude = details.getDouble("latitude");
+                                            longitude = details.getDouble("longitude");
+                                            LatLng park = new LatLng(latitude, longitude);
+                                            parking = googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park).title("parking" + i));
+
+                                        }
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            }) {
+
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<>();
+
+
+                                    params.put("latitude", String.valueOf(latitude_current));
+                                    params.put("longitude", String.valueOf(longitude_current));
+                                    Log.d(TAG, "getParams: lat "+latitude_current);
+                                    return params;
+
+
+                                }};
+                            queue.add(stringRequest);
 
                         } else {
                             Log.w(TAG, "getLastLocation:exception", task.getException());
@@ -748,11 +798,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         uiSettings.setCompassEnabled(true);
         googleMap_global.setMyLocationEnabled(true);
-        queue = Volley.newRequestQueue(this);
+
+        //adding marker
+
+
+      /*  queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://sih2018.esy.es/parking.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "map response: " + response);
+
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray jsonArray = jsonObject.getJSONArray("server_response");
@@ -777,33 +832,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }
         }) {
-            @SuppressLint("MissingPermission")
+
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
 
-                mFusedLocationClient.getLastLocation()
-                        .addOnCompleteListener(MapActivity.this, new OnCompleteListener<Location>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Location> task) {
 
-                                if (task.isSuccessful() && task.getResult() != null) {
-                                    Location mLastLocation = task.getResult();
-                                 latitude=mLastLocation.getLatitude();
-                                 longitude=mLastLocation.getLongitude();
-
-                                } else {
-                                    Log.w(TAG, "getLastLocation:exception", task.getException());
-                                    Toast.makeText(MapActivity.this, "Unable to find the location.\nPease enage your gps", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                params.put("latitude", String.valueOf(latitude));
-                params.put("longitude", String.valueOf(longitude));
+                params.put("latitude", String.valueOf(latitude_current));
+                params.put("longitude", String.valueOf(longitude_current));
+                Log.d(TAG, "getParams: lat "+latitude_current);
                 return params;
 
 
         }};
-        queue.add(stringRequest);
+        queue.add(stringRequest);*/
 
 
         /*LatLng park1 = new LatLng(23.711986, 76.504629);

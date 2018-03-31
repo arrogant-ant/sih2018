@@ -1,5 +1,7 @@
 package inc.iris.sih2018.logic;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,6 +14,7 @@ import java.util.Calendar;
 
 
 public class Parse {
+    private static final String TAG = "Parse";
     public static Booking[] getBooking(String response) {
 
         int i;
@@ -24,11 +27,11 @@ public class Parse {
             Booking[] list = new Booking[array.length()];
             for (i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
-                arrival.setTimeInMillis(object.getLong("arrival"));
+                arrival.setTimeInMillis(Long.valueOf(object.getString("arrival")));
                 departure.setTimeInMillis(object.getLong("departure"));
 
                 list[i] = new Booking(
-                        object.getString("bookingID"),
+                        object.getString("booking_id"),
                         arrival, //arrival
                         departure, //
                         new ParkingSlot(
@@ -42,6 +45,7 @@ public class Parse {
                         object.getString("type"),
                         object.getString("status"),
                         object.getInt("price"));
+                Log.d(TAG, "getBooking:i "+list[i]);
             }
             return list;
         } catch (JSONException e) {
