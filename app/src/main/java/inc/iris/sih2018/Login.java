@@ -25,6 +25,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import dmax.dialog.SpotsDialog;
 import inc.iris.sih2018.logic.User;
@@ -34,6 +35,16 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Login extends AppCompatActivity {
     private static final String TAG ="Login" ;
+
+    public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9+._%-+]{1,256}" +
+                    "@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9-]{0,64}" +
+                    "(" +
+                    "." +
+                    "[a-zA-Z0-9][a-zA-Z0-9-]{0,25}" +
+                    ")+"
+    );
 //    public static final String PREF_TAG="username";
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -75,6 +86,9 @@ public class Login extends AppCompatActivity {
         sharedPreferences = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE );
         editor = sharedPreferences.edit();
     }
+    private boolean checkEmail(String email) {
+        return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
+    }
 
     private void showSigninDiaog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -99,6 +113,11 @@ public class Login extends AppCompatActivity {
                             .show();
                     return;
 
+                }
+                if(!checkEmail(username)) {
+                    Snackbar.make(relativelayout, "Please enter valid email address", Snackbar.LENGTH_SHORT)
+                            .show();
+                    return;
                 }
                 if (TextUtils.isEmpty(pass)) {
                     Snackbar.make(relativelayout, "Please enter Password", Snackbar.LENGTH_SHORT)
@@ -209,6 +228,11 @@ public class Login extends AppCompatActivity {
                             .show();
                     return;
 
+                }
+                if(!checkEmail(username)) {
+                    Snackbar.make(relativelayout, "Please enter valid email address", Snackbar.LENGTH_SHORT)
+                            .show();
+                    return;
                 }
                 if (TextUtils.isEmpty(pass)) {
                     Snackbar.make(relativelayout, "Please enter Password", Snackbar.LENGTH_SHORT)
