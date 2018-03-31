@@ -20,25 +20,32 @@ public class Booking {
     private Calendar schArrival;
     private Calendar schDeparture;
     private int bookingDuration;
-
+    private String bookingID;
 
     private int bookingCost;
     private ParkingSlot slot;
     private static final int TIME_UNIT = 1000 * 60 * 60;//FOR ONE HOUR
     private String vehicleID; //can be vehicle no;
-    private BookingStatus status;
+    private String status;
+    private String type;
     private static final String TAG = "Booking";
 
 
-    public Booking(Calendar schArrival, Calendar schDeparture, ParkingSlot slot, String vehicleID, BookingStatus status) {
+    public Booking(String bookingID,Calendar schArrival, Calendar schDeparture, ParkingSlot slot, String vehicleID, String type,String status,int bookingCost) {
 
+        this.bookingID=bookingID;
         this.schArrival = schArrival;
         this.schDeparture = schDeparture;
         this.slot = slot;
-        bookingDuration = (int) Math.ceil((double) (schDeparture.getTimeInMillis() - schArrival.getTimeInMillis()) / TIME_UNIT);
-        bookingCost = bookingDuration * slot.getRate();
+        //bookingDuration = (int) Math.ceil((double) (schDeparture.getTimeInMillis() - schArrival.getTimeInMillis()) / TIME_UNIT);
+        this.bookingCost = bookingCost;
         this.vehicleID = vehicleID;
         this.status = status;
+        this.type=type;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public Calendar getSchArrival() {
@@ -75,12 +82,12 @@ public class Booking {
     }
 
     //slot can only be changed if car not parked
-    public boolean setSlot(ParkingSlot slot) {
+ /*   public boolean setSlot(ParkingSlot slot) {
         if (status == BookingStatus.PARKED)
             return false;
         this.slot = slot;
         return true;
-    }
+    }*/
 //static method to get estimated boking cost
     public static int getBookingCost(long arrivalTime, long departureTime, int cost) {
         int time = (int) Math.ceil((double) (departureTime - arrivalTime) / TIME_UNIT);
@@ -92,11 +99,11 @@ public class Booking {
         return vehicleID;
     }
 
-    public BookingStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(BookingStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

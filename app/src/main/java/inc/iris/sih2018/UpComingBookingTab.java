@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class UpComingBookingTab extends Fragment {
 
     private RecyclerView recyclerView;
     private String url ="http://www.sih2018.esy.es/user_current.php";
+    private static final String TAG = "UpComingBookingTab";
 
     public UpComingBookingTab() {
         // Required empty public constructor
@@ -59,6 +61,7 @@ public class UpComingBookingTab extends Fragment {
             @Override
             public void onResponse(String response) {
                 parseResponse(response);
+                Log.d(TAG, "onResponse: "+response);
                 Toast.makeText(getActivity(), "res "+response, Toast.LENGTH_SHORT).show();
 
             }
@@ -72,7 +75,7 @@ public class UpComingBookingTab extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param=new HashMap<>();
                 param.put("user",user);
-
+                param.put("TYPE","UPCOMING");
                 return param;
 
 
@@ -84,7 +87,7 @@ public class UpComingBookingTab extends Fragment {
 
 
     private void parseResponse(String response) {
-        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity()));
+        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response),getActivity()));
 
     }
 

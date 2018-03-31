@@ -42,7 +42,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         //todo remove address
         holder.cost.setText(String.valueOf(booking.getBookingCost()));
         holder.timeSlot.setText(booking.getTimeSlot());
-        if(booking.getStatus()==BookingStatus.PARKED)
+        if(booking.getType().equals("CURRENT"))
             holder.option.setImageResource(R.mipmap.ic_video);
         else
             holder.option.setImageResource(R.mipmap.ic_navigation);
@@ -58,7 +58,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView parkingImage, option;
-        TextView name,address,timeSlot,cost;
+        TextView name,address,timeSlot,cost,status;
         public ViewHolder(View itemView) {
             super(itemView);
             parkingImage=itemView.findViewById(R.id.parking_img);
@@ -67,6 +67,8 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
             address=itemView.findViewById(R.id.parking_address);
             timeSlot=itemView.findViewById(R.id.time_slot);
             cost=itemView.findViewById(R.id.cost);
+            status=itemView.findViewById(R.id.status);
+
 
 
         }

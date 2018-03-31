@@ -70,6 +70,7 @@ public class CurrentBookingTab extends Fragment {
             public void onResponse(String response) {
                 parseResponse(response);
                 Toast.makeText(getActivity(), "res "+response, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onResponse: "+response);
 
             }
         }, new Response.ErrorListener() {
@@ -82,6 +83,7 @@ public class CurrentBookingTab extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param=new HashMap<>();
                 param.put("user",user);
+                param.put("TYPE","CURRENT");
                 return param;
             }
         };
@@ -91,7 +93,7 @@ public class CurrentBookingTab extends Fragment {
 
 
     private void parseResponse(String response) {
-        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity()));
+        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response),getActivity()));
 
     }
 

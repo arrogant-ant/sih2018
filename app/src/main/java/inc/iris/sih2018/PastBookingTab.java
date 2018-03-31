@@ -65,6 +65,8 @@ public class PastBookingTab extends Fragment {
         StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d(TAG, "onResponse: "+response);
+
                 try {
                     JSONObject object=new JSONObject(response);
                     Log.d(TAG, "onResponse val: "+object.getJSONArray("server_response").get(1));
@@ -72,7 +74,6 @@ public class PastBookingTab extends Fragment {
                     e.printStackTrace();
                 }
                 parseResponse(response);
-                Log.d(TAG, "onResponse: "+response);
                // Toast.makeText(getActivity(), "res "+response, Toast.LENGTH_SHORT).show();
 
             }
@@ -86,6 +87,7 @@ public class PastBookingTab extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param=new HashMap<>();
                 param.put("user",user);
+                param.put("TYPE","PAST");
                 Log.d(TAG, "getParams: user "+user);
                 return param;
             }
@@ -100,7 +102,7 @@ public class PastBookingTab extends Fragment {
                 new ParkingSlot("Nagpur","Station",22.0,22.0,100,12),
                 "MH010A1234",BookingStatus.CONFIRMED);
         recyclerView.setAdapter((new BookingAdapter(new Booking[]{booking},getActivity())));*/
-        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response,BookingStatus.CONFIRMED),getActivity()));
+        recyclerView.setAdapter(new BookingAdapter(Parse.getBooking(response),getActivity()));
 
     }
 }
