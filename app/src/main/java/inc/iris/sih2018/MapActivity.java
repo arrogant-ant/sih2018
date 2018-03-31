@@ -33,6 +33,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -67,18 +74,28 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import inc.iris.sih2018.logic.PlaceAutocompleteAdapter;
 import inc.iris.sih2018.logic.User;
 
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
-
+    private RequestQueue queue;
+    JSONObject details;
+    double latitude;
+    double longitude;
     private static final String TAG = MapActivity.class.getSimpleName();
 
     /**
@@ -149,7 +166,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // Labels.
 
     private static final float DEFAULT_ZOOM = 12f;
-    Marker marker_object, parking1, parking2, parking3, parking4;
+    Marker marker_object, parking, parking2, parking3, parking4;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     protected GeoDataClient mGeoDataClient;
     private GoogleApiClient mGoogleApiClient;
@@ -197,7 +214,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         buildLocationSettingsRequest();
         if (!mRequestingLocationUpdates) {
             mRequestingLocationUpdates = true;
-           /* setButtonsEnabledState();*/
+            /* setButtonsEnabledState();*/
             startLocationUpdates();
         }
         SupportMapFragment mapfragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -507,7 +524,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 mRequestingLocationUpdates = false;
                         }
 
-                       /* updateUI();*/
+                        /* updateUI();*/
                     }
                 });
     }
@@ -731,9 +748,65 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         uiSettings.setCompassEnabled(true);
         googleMap_global.setMyLocationEnabled(true);
+        queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://sih2018.esy.es/parking.php", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "map response: " + response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonArray = jsonObject.getJSONArray("server_response");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        details = (JSONObject) jsonArray.get(i);
+                        latitude = details.getDouble("latitude");
+                        longitude = details.getDouble("longitude");
+                        LatLng park = new LatLng(latitude, longitude);
+                        parking = googleMap_global.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.parking_round)).position(park).title("parking" + i));
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 
-        LatLng park1 = new LatLng(23.711986, 76.504629);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @SuppressLint("MissingPermission")
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+
+                mFusedLocationClient.getLastLocation()
+                        .addOnCompleteListener(MapActivity.this, new OnCompleteListener<Location>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Location> task) {
+
+                                if (task.isSuccessful() && task.getResult() != null) {
+                                    Location mLastLocation = task.getResult();
+                                 latitude=mLastLocation.getLatitude();
+                                 longitude=mLastLocation.getLongitude();
+
+                                } else {
+                                    Log.w(TAG, "getLastLocation:exception", task.getException());
+                                    Toast.makeText(MapActivity.this, "Unable to find the location.\nPease enage your gps", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                params.put("latitude", String.valueOf(latitude));
+                params.put("longitude", String.valueOf(longitude));
+                return params;
+
+
+        }};
+        queue.add(stringRequest);
+
+
+        /*LatLng park1 = new LatLng(23.711986, 76.504629);
         LatLng park2 = new LatLng(24.711986, 36.504629);
         LatLng park3 = new LatLng(28.711986, 86.504629);
         LatLng park4 = new LatLng(65.711986, 56.504629);
@@ -834,7 +907,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             }
         });
-
+*/
     }
 
     /*
