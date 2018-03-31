@@ -37,8 +37,7 @@ public class Parse {
                         new ParkingSlot(
                                 object.getString("name"),
                                 object.getString("location"),
-                                0.0,0.0,
-                                object.getInt("capacity"),//available
+                                0.0,0.0,0,//available
                                 object.getInt("slotID")
                         ),
                         object.getString("vehicleID"),
