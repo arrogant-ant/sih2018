@@ -47,6 +47,8 @@ public class SplashActivity extends AppCompatActivity {
             // for ActivityCompat#requestPermissions for more details.
 
             return ;
+
+
         }
 
         sharedPreferences = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE );
